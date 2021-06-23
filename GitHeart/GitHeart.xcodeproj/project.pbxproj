@@ -97,6 +97,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4D238F3426837B9400DC6397 /* Build configuration list for PBXNativeTarget "GitHeart" */;
 			buildPhases = (
+				4D238F832683810300DC6397 /* Format */,
 				4D238F0626837B9300DC6397 /* Sources */,
 				4D238F0726837B9300DC6397 /* Frameworks */,
 				4D238F0826837B9300DC6397 /* Resources */,
@@ -183,6 +184,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4D238F832683810300DC6397 /* Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Format;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./scripts/format\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4D238F0626837B9300DC6397 /* Sources */ = {
