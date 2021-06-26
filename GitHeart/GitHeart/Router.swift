@@ -15,8 +15,7 @@ class Router {
     }
 
     func start() {
-        let controller = UIViewController()
-        controller.view.backgroundColor = UIColor.systemRed
-        window.rootViewController = controller
+        let controller = UsersListViewController(viewModel: UsersListViewModel())
+        window.rootViewController = UINavigationController(rootViewController: controller)
     }
 }
