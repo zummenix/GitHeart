@@ -66,6 +66,7 @@ class UserDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.backgroundColor = Colors.background
 
         view.addSubview(avatarImageView)
@@ -75,7 +76,7 @@ class UserDetailsViewController: UIViewController {
         view.addSubview(followersFollowingReposLabel)
 
         NSLayoutConstraint.activate([
-            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10.0),
+            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             avatarImageView.widthAnchor.constraint(equalToConstant: 200.0),
             avatarImageView.heightAnchor.constraint(equalToConstant: 200.0),
@@ -98,6 +99,11 @@ class UserDetailsViewController: UIViewController {
         ])
 
         reloadData()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.setNavigationBarTransparent(true)
     }
 
     override func viewDidLayoutSubviews() {

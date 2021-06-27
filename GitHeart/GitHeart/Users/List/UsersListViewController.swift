@@ -32,6 +32,8 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         return tableView
     }()
 
+    var didTapUser: ((User) -> Void)?
+
     init(viewModel: UsersListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -46,6 +48,11 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         view.backgroundColor = Colors.background
         view.addSubview(tableView)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.setNavigationBarTransparent(false)
     }
 
     override func viewDidLayoutSubviews() {
@@ -67,5 +74,6 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        didTapUser?(viewModel.user(at: indexPath.row))
     }
 }

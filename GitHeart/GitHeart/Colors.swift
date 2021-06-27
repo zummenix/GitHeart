@@ -8,6 +8,7 @@
 import UIKit
 
 enum Colors {
+    static let tintColor = UIColor.systemRed
     static let background = UIColor(named: "background")!
     static let secondaryBackground = UIColor(named: "secondary-background")!
     static let backgroundSelection = UIColor(named: "background-selection")!
