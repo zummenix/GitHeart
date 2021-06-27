@@ -11,7 +11,7 @@ class UsersListViewModel {
     private var users: [User] = []
 
     init() {
-        users = [User(name: "Aleksey Kuznetsov", login: "zummenix")]
+        users = [User(id: 1, name: "Aleksey Kuznetsov", login: "zummenix")]
     }
 
     func numberOfUsers() -> Int {

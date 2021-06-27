@@ -10,6 +10,50 @@ import UIKit
 class UserDetailsViewController: UIViewController {
     private let viewModel: UserDetailsViewModel
 
+    private let avatarImageView: UIImageView = {
+        let imageView = UIImageView(frame: .zero)
+        imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = Colors.secondaryBackground
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+
+    private let nameLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.textAlignment = .center
+        label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+        label.textColor = Colors.primaryTextColor
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let loginLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.textAlignment = .center
+        label.font = UIFont.preferredFont(forTextStyle: .title1)
+        label.textColor = Colors.secondaryTextColor
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let bioLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.textAlignment = .center
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.textColor = Colors.primaryTextColor
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let followersFollowingReposLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     init(viewModel: UserDetailsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -23,5 +67,48 @@ class UserDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Colors.background
+
+        view.addSubview(avatarImageView)
+        view.addSubview(nameLabel)
+        view.addSubview(loginLabel)
+        view.addSubview(bioLabel)
+        view.addSubview(followersFollowingReposLabel)
+
+        NSLayoutConstraint.activate([
+            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10.0),
+            avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 200.0),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 200.0),
+
+            nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 20.0),
+            nameLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+
+            loginLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2.0),
+            loginLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            loginLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+
+            bioLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 20.0),
+            bioLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            bioLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+
+            followersFollowingReposLabel.topAnchor.constraint(equalTo: bioLabel.bottomAnchor, constant: 20.0),
+            followersFollowingReposLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
+            followersFollowingReposLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+        ])
+
+        reloadData()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        avatarImageView.layer.cornerRadius = avatarImageView.frame.size.height / 2.0
+    }
+
+    private func reloadData() {
+        nameLabel.text = viewModel.name
+        loginLabel.text = viewModel.login
+        bioLabel.text = viewModel.bio
+        followersFollowingReposLabel.attributedText = viewModel.followersFollowingRepos
     }
 }
