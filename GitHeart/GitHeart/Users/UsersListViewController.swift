@@ -7,8 +7,22 @@
 
 import UIKit
 
-class UsersListViewController: UIViewController {
+class UsersListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private let viewModel: UsersListViewModel
+
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: CGRect.zero, style: .plain)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.estimatedRowHeight = 0.0
+        tableView.estimatedSectionHeaderHeight = 0.0
+        tableView.estimatedSectionFooterHeight = 0.0
+        tableView.rowHeight = 70.0
+        tableView.backgroundColor = Colors.background
+        tableView.register(UserCell.self, forCellReuseIdentifier: UserCell.identifier)
+        return tableView
+    }()
+
     init(viewModel: UsersListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -22,5 +36,27 @@ class UsersListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Colors.background
+        view.addSubview(tableView)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
+    }
+
+    // MARK: - UITableViewDelegate, UITableViewDataSource
+
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
+        return viewModel.numberOfUsers()
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.identifier, for: indexPath) as! UserCell
+        cell.configure(viewModel.userViewModel(at: indexPath.row))
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
