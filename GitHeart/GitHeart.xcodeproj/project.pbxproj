@@ -73,12 +73,8 @@
 		4D0A9EC826870260006D0F5A /* Users */ = {
 			isa = PBXGroup;
 			children = (
-				4D0A9ED9268706C6006D0F5A /* UsersListViewModel.swift */,
-				4D0A9EC92687027B006D0F5A /* UsersListViewController.swift */,
-				4D0A9EE3268853AC006D0F5A /* UserCell.swift */,
-				4D0A9EE72688583A006D0F5A /* UserViewModel.swift */,
-				4D0A9EDF2687075C006D0F5A /* UserDetailsViewModel.swift */,
-				4D0A9ECD2687029C006D0F5A /* UserDetailsViewController.swift */,
+				4D79B32526889339008C1319 /* List */,
+				4D79B32826889348008C1319 /* Details */,
 			);
 			path = Users;
 			sourceTree = "<group>";
@@ -131,6 +127,26 @@
 				4D238F2626837B9400DC6397 /* Info.plist */,
 			);
 			path = GitHeartTests;
+			sourceTree = "<group>";
+		};
+		4D79B32526889339008C1319 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				4D0A9ED9268706C6006D0F5A /* UsersListViewModel.swift */,
+				4D0A9EC92687027B006D0F5A /* UsersListViewController.swift */,
+				4D0A9EE3268853AC006D0F5A /* UserCell.swift */,
+				4D0A9EE72688583A006D0F5A /* UserViewModel.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		4D79B32826889348008C1319 /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				4D0A9EDF2687075C006D0F5A /* UserDetailsViewModel.swift */,
+				4D0A9ECD2687029C006D0F5A /* UserDetailsViewController.swift */,
+			);
+			path = Details;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
