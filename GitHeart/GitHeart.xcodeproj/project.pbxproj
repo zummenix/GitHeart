@@ -134,8 +134,8 @@
 			children = (
 				4D0A9ED9268706C6006D0F5A /* UsersListViewModel.swift */,
 				4D0A9EC92687027B006D0F5A /* UsersListViewController.swift */,
-				4D0A9EE3268853AC006D0F5A /* UserCell.swift */,
 				4D0A9EE72688583A006D0F5A /* UserViewModel.swift */,
+				4D0A9EE3268853AC006D0F5A /* UserCell.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";

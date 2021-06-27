@@ -10,6 +10,13 @@ import UIKit
 class UsersListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     private let viewModel: UsersListViewModel
 
+    private lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 60.0))
+        searchBar.placeholder = "Search GitHub Users"
+        searchBar.searchBarStyle = .minimal
+        return searchBar
+    }()
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .plain)
         tableView.delegate = self
@@ -20,6 +27,8 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.rowHeight = 70.0
         tableView.backgroundColor = Colors.background
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCell.identifier)
+        tableView.tableHeaderView = searchBar
+        tableView.tableFooterView = UIView()
         return tableView
     }()
 
