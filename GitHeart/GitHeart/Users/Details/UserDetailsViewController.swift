@@ -98,6 +98,10 @@ class UserDetailsViewController: UIViewController {
             followersFollowingReposLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
         ])
 
+        viewModel.load { [weak self] _ in
+            self?.reloadData()
+        }
+
         reloadData()
     }
 

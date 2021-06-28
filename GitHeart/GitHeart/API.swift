@@ -38,6 +38,14 @@ class API {
         })
     }
 
+    func userDetails(login: String, completion: @escaping (Result<UserDetails, Error>) -> Void) {
+        get(request: request(path: "/users/\(login)", query: [:])) { result in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+
     private func request(path: String, query: [String: String]) -> URLRequest {
         var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
         urlComponents.path = path

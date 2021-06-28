@@ -9,6 +9,7 @@ import UIKit
 
 class UserDetailsViewModel {
     private let user: User
+    private let api: API
     private var userDetails: UserDetails?
 
     var name: String {
@@ -35,11 +36,21 @@ class UserDetailsViewModel {
         return string.centered
     }
 
-    init(user: User) {
+    init(user: User, api: API) {
         self.user = user
+        self.api = api
+    }
 
-        userDetails = UserDetails(name: "Aleksey Kuznetsov", login: user.login, bio: "Cool Developer", company: "Company", blog: "My Blog", location: "Location",
-                                  email: "user@user.com", followers: 99, following: 111, publicRepos: 123, publicGists: 321)
+    func load(completion: @escaping (Result<Void, Error>) -> Void) {
+        api.userDetails(login: user.login) { result in
+            switch result {
+            case let .success(userDetails):
+                self.userDetails = userDetails
+                completion(.success(()))
+            case let .failure(error):
+                completion(.failure(error))
+            }
+        }
     }
 }
 

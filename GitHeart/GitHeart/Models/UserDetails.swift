@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct UserDetails {
+struct UserDetails: Decodable {
     let name: String
     let login: String
-    let bio: String
+    let bio: String?
     let company: String?
     let blog: String?
     let location: String?

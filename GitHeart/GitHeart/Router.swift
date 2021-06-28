@@ -24,7 +24,7 @@ class Router {
     }
 
     private func showUserDetails(_ user: User) {
-        let controller = UserDetailsViewController(viewModel: UserDetailsViewModel(user: user))
+        let controller = UserDetailsViewController(viewModel: UserDetailsViewModel(user: user, api: api))
         window.rootViewController?.show(controller, sender: nil)
     }
 }
