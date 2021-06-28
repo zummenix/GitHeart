@@ -36,7 +36,7 @@ class UsersListViewModel {
 
     func userViewModel(at index: Int) -> UserViewModel {
         let user = self.user(at: index)
-        return UserViewModel(name: user.name ?? "", login: user.login)
+        return UserViewModel(login: user.login)
     }
 
     func user(at index: Int) -> User {

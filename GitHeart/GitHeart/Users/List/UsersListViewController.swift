@@ -24,7 +24,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.estimatedRowHeight = 0.0
         tableView.estimatedSectionHeaderHeight = 0.0
         tableView.estimatedSectionFooterHeight = 0.0
-        tableView.rowHeight = 70.0
+        tableView.rowHeight = 60.0
         tableView.backgroundColor = Colors.background
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCell.identifier)
         tableView.tableHeaderView = searchBar

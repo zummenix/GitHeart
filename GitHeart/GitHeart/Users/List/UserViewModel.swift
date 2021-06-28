@@ -8,6 +8,5 @@
 import Foundation
 
 struct UserViewModel {
-    let name: String
     let login: String
 }

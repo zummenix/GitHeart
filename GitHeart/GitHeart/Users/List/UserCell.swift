@@ -19,25 +19,12 @@ class UserCell: UITableViewCell {
         return imageView
     }()
 
-    private let nameLabel: UILabel = {
+    private let loginLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.textColor = Colors.primaryTextColor
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-
-    private let loginLabel: UILabel = {
-        let label = UILabel(frame: .zero)
-        label.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        label.textColor = Colors.secondaryTextColor
-        return label
-    }()
-
-    private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [nameLabel, loginLabel])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        return stackView
     }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -52,7 +39,7 @@ class UserCell: UITableViewCell {
         selectedBackgroundView?.backgroundColor = Colors.backgroundSelection
 
         contentView.addSubview(avatarImageView)
-        contentView.addSubview(stackView)
+        contentView.addSubview(loginLabel)
 
         NSLayoutConstraint.activate([
             avatarImageView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
@@ -60,11 +47,10 @@ class UserCell: UITableViewCell {
             avatarImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8.0),
             avatarImageView.widthAnchor.constraint(equalTo: avatarImageView.heightAnchor),
 
-            stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 10.0),
-            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-            stackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+            loginLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 10.0),
+            loginLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            loginLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            loginLabel.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
         ])
     }
 
@@ -76,11 +62,10 @@ class UserCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         avatarImageView.layer.cornerRadius = avatarImageView.frame.size.width / 2.0
-        separatorInset = UIEdgeInsets(top: 0.0, left: stackView.frame.origin.x, bottom: 0.0, right: 0.0)
+        separatorInset = UIEdgeInsets(top: 0.0, left: loginLabel.frame.origin.x, bottom: 0.0, right: 0.0)
     }
 
     func configure(_ viewModel: UserViewModel) {
-        nameLabel.text = viewModel.name
         loginLabel.text = viewModel.login
     }
 }
