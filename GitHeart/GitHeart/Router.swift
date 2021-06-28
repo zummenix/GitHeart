@@ -9,14 +9,16 @@ import UIKit
 
 class Router {
     let window: UIWindow
+    let api: API
 
     init(window: UIWindow) {
         self.window = window
+        api = API()
         window.tintColor = Colors.tintColor
     }
 
     func start() {
-        let controller = UsersListViewController(viewModel: UsersListViewModel())
+        let controller = UsersListViewController(viewModel: UsersListViewModel(api: api))
         controller.didTapUser = { [weak self] user in self?.showUserDetails(user) }
         window.rootViewController = UINavigationController(rootViewController: controller)
     }

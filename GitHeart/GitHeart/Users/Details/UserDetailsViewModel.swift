@@ -12,7 +12,7 @@ class UserDetailsViewModel {
     private var userDetails: UserDetails?
 
     var name: String {
-        return user.name
+        return user.name ?? ""
     }
 
     var login: String {
@@ -38,7 +38,7 @@ class UserDetailsViewModel {
     init(user: User) {
         self.user = user
 
-        userDetails = UserDetails(name: user.name, login: user.login, bio: "Cool Developer", company: "Company", blog: "My Blog", location: "Location",
+        userDetails = UserDetails(name: user.name ?? "", login: user.login, bio: "Cool Developer", company: "Company", blog: "My Blog", location: "Location",
                                   email: "user@user.com", followers: 99, following: 111, publicRepos: 123, publicGists: 321)
     }
 }

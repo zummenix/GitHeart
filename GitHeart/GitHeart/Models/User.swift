@@ -7,8 +7,14 @@
 
 import Foundation
 
-struct User {
+struct User: Codable {
     let id: Int
-    let name: String
+    let name: String?
     let login: String
+}
+
+struct PaginatedUsers: Codable {
+    let totalCount: Int
+    let incompleteResults: Bool
+    let items: [User]
 }

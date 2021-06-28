@@ -48,6 +48,10 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         view.backgroundColor = Colors.background
         view.addSubview(tableView)
+
+        viewModel.didUpdateState = { [weak self] in self?.tableView.reloadData() }
+
+        viewModel.load()
     }
 
     override func viewWillAppear(_ animated: Bool) {

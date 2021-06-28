@@ -8,10 +8,26 @@
 import Foundation
 
 class UsersListViewModel {
+    private let api: API
     private var users: [User] = []
+    private var page: Int = 1
 
-    init() {
-        users = [User(id: 1, name: "Aleksey Kuznetsov", login: "zummenix")]
+    var didUpdateState: (() -> Void)?
+
+    init(api: API) {
+        self.api = api
+    }
+
+    func load() {
+        api.users(searchTerm: "", page: page) { [weak self] result in
+            switch result {
+            case let .success(paginatedUsers):
+                self?.users.append(contentsOf: paginatedUsers.items)
+                self?.didUpdateState?()
+            case let .failure(error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
     }
 
     func numberOfUsers() -> Int {
@@ -20,7 +36,7 @@ class UsersListViewModel {
 
     func userViewModel(at index: Int) -> UserViewModel {
         let user = self.user(at: index)
-        return UserViewModel(name: user.name, login: user.login)
+        return UserViewModel(name: user.name ?? "", login: user.login)
     }
 
     func user(at index: Int) -> User {
