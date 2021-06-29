@@ -8,6 +8,8 @@
 import UIKit
 
 class Router {
+    private let imagesService = ImagesService(session: URLSession.shared, cache: MemoryCache(maxByteSize: 2 * 1024 * 1024))
+
     let window: UIWindow
     let api: API
 
@@ -24,7 +26,7 @@ class Router {
     }
 
     private func showUserDetails(_ user: User) {
-        let controller = UserDetailsViewController(viewModel: UserDetailsViewModel(user: user, api: api))
+        let controller = UserDetailsViewController(viewModel: UserDetailsViewModel(user: user, api: api, imagesService: imagesService))
         window.rootViewController?.show(controller, sender: nil)
     }
 }

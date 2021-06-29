@@ -10,7 +10,12 @@ import UIKit
 class UserDetailsViewModel {
     private let user: User
     private let api: API
+    let imagesService: ImagesService
     private var userDetails: UserDetails?
+
+    var avatarUrl: URL? {
+        return userDetails?.avatarUrl ?? user.avatarUrl
+    }
 
     var name: String {
         return userDetails?.name ?? ""
@@ -36,9 +41,10 @@ class UserDetailsViewModel {
         return string.centered
     }
 
-    init(user: User, api: API) {
+    init(user: User, api: API, imagesService: ImagesService) {
         self.user = user
         self.api = api
+        self.imagesService = imagesService
     }
 
     func load(completion: @escaping (Result<Void, Error>) -> Void) {

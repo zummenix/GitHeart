@@ -10,8 +10,8 @@ import UIKit
 class UserCell: UITableViewCell {
     static let identifier = String(describing: UserCell.self)
 
-    private let avatarImageView: UIImageView = {
-        let imageView = UIImageView(frame: .zero)
+    private let avatarImageView: WebImageView = {
+        let imageView = WebImageView(frame: .zero)
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = Colors.secondaryBackground
         imageView.clipsToBounds = true
@@ -67,5 +67,6 @@ class UserCell: UITableViewCell {
 
     func configure(_ viewModel: UserViewModel) {
         loginLabel.text = viewModel.login
+        avatarImageView.setImage(url: viewModel.avatarUrl, imagesService: viewModel.imagesService)
     }
 }

@@ -10,8 +10,8 @@ import UIKit
 class UserDetailsViewController: UIViewController {
     private let viewModel: UserDetailsViewModel
 
-    private let avatarImageView: UIImageView = {
-        let imageView = UIImageView(frame: .zero)
+    private let avatarImageView: WebImageView = {
+        let imageView = WebImageView(frame: .zero)
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = Colors.secondaryBackground
         imageView.clipsToBounds = true
@@ -116,6 +116,7 @@ class UserDetailsViewController: UIViewController {
     }
 
     private func reloadData() {
+        avatarImageView.setImage(url: viewModel.avatarUrl, imagesService: viewModel.imagesService)
         nameLabel.text = viewModel.name
         loginLabel.text = viewModel.login
         bioLabel.text = viewModel.bio

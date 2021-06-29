@@ -9,4 +9,6 @@ import Foundation
 
 struct UserViewModel {
     let login: String
+    let avatarUrl: URL?
+    let imagesService: ImagesService
 }

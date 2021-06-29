@@ -15,6 +15,7 @@ class UsersListViewModel {
     private var isLoading: Bool = false
     private var isLastPage: Bool = false
     private var searchWorkItem: DispatchWorkItem?
+    private let thumbnailImagesService = ImagesService(session: URLSession.shared, cache: MemoryCache(maxByteSize: 10 * 1024 * 1024))
 
     var didUpdateState: (() -> Void)?
 
@@ -71,7 +72,7 @@ class UsersListViewModel {
 
     func userViewModel(at index: Int) -> UserViewModel {
         let user = self.user(at: index)
-        return UserViewModel(login: user.login)
+        return UserViewModel(login: user.login, avatarUrl: user.avatarUrl, imagesService: thumbnailImagesService)
     }
 
     func user(at index: Int) -> User {
