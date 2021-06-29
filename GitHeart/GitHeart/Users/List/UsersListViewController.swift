@@ -7,13 +7,14 @@
 
 import UIKit
 
-class UsersListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class UsersListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     private let viewModel: UsersListViewModel
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 60.0))
         searchBar.placeholder = "Search GitHub Users"
         searchBar.searchBarStyle = .minimal
+        searchBar.delegate = self
         return searchBar
     }()
 
@@ -79,5 +80,23 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         didTapUser?(viewModel.user(at: indexPath.row))
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let bottomPosition = scrollView.contentOffset.y + scrollView.bounds.size.height
+        if bottomPosition > scrollView.contentSize.height - 200.0 {
+            viewModel.loadNextPageIfPossible()
+        }
+    }
+
+    // MARK: - UISearchBarDelegate
+
+    func searchBar(_: UISearchBar, textDidChange searchText: String) {
+        viewModel.applySearch(text: searchText)
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        viewModel.applySearch(text: "")
     }
 }
