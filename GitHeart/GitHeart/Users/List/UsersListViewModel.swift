@@ -17,7 +17,8 @@ class UsersListViewModel {
     private var isLastPage: Bool = false
     private var searchWorkItem: DispatchWorkItem?
 
-    var didUpdateState: (() -> Void)?
+    var didUpdateUsersList: (() -> Void)?
+    var didFail: ((Error) -> Void)?
 
     init(api: API, imageService: ImageService) {
         self.api = api
@@ -25,6 +26,7 @@ class UsersListViewModel {
     }
 
     func load() {
+        guard !isLoading else { return }
         isLoading = true
         print("Loading page \(page), search: \(searchText)")
         api.users(searchTerm: searchText, page: page) { [weak self] result in
@@ -37,9 +39,9 @@ class UsersListViewModel {
             case let .success(paginatedUsers):
                 self.users.append(contentsOf: paginatedUsers.items)
                 self.isLastPage = paginatedUsers.items.isEmpty
-                self.didUpdateState?()
+                self.didUpdateUsersList?()
             case let .failure(error):
-                print("Error: \(error.localizedDescription)")
+                self.didFail?(error)
             }
         }
     }

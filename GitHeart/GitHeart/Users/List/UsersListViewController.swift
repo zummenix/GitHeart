@@ -50,7 +50,8 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         view.backgroundColor = Colors.background
         view.addSubview(tableView)
 
-        viewModel.didUpdateState = { [weak self] in self?.tableView.reloadData() }
+        viewModel.didUpdateUsersList = { [weak self] in self?.tableView.reloadData() }
+        viewModel.didFail = { [weak self] error in self?.show(error: error) }
 
         viewModel.load()
     }
@@ -63,6 +64,16 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+    }
+
+    private func show(error: Error) {
+        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Try Again", style: .default, handler: { [weak self] _ in
+            self?.viewModel.load()
+        }))
+
+        present(alert, animated: true, completion: nil)
     }
 
     // MARK: - UITableViewDelegate, UITableViewDataSource
