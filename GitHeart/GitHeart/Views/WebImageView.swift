@@ -21,11 +21,8 @@ class WebImageView: UIImageView {
     }
 
     func setImage(url: URL?, imageService: ImageService) {
-        guard let url = url else {
-            image = nil
-            return
-        }
-        task?.cancel()
+        image = nil
+        guard let url = url else { return }
         task = imageService.imageBy(url: url, completion: { [weak self] image in
             self?.image = image
         })
