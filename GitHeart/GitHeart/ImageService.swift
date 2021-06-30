@@ -1,5 +1,5 @@
 //
-//  ImagesService.swift
+//  ImageService.swift
 //  GitHeart
 //
 //  Created by Aleksey Kuznetsov on 29.06.2021.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImagesService {
+class ImageService {
     private let session: URLSession
     private let cache: MemoryCache<URL, Data>
 
@@ -27,7 +27,7 @@ class ImagesService {
                         return
                     }
                     DispatchQueue.main.async {
-                        print("ImagesService: failed to download image: \(url)\nError: \(error)")
+                        print("ImageService: failed to download image: \(url)\nError: \(error)")
                         completion(nil)
                     }
 
@@ -40,7 +40,7 @@ class ImagesService {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        print("ImagesService: failed to decode image")
+                        print("ImageService: failed to decode image")
                         completion(nil)
                     }
                 }

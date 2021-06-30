@@ -20,13 +20,13 @@ class WebImageView: UIImageView {
         }
     }
 
-    func setImage(url: URL?, imagesService: ImagesService) {
+    func setImage(url: URL?, imageService: ImageService) {
         guard let url = url else {
             image = nil
             return
         }
         task?.cancel()
-        task = imagesService.imageBy(url: url, completion: { [weak self] image in
+        task = imageService.imageBy(url: url, completion: { [weak self] image in
             self?.image = image
         })
     }

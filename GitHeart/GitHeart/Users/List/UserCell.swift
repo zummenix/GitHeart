@@ -67,6 +67,6 @@ class UserCell: UITableViewCell {
 
     func configure(_ viewModel: UserViewModel) {
         loginLabel.text = viewModel.login
-        avatarImageView.setImage(url: viewModel.avatarUrl, imagesService: viewModel.imagesService)
+        avatarImageView.setImage(url: viewModel.avatarUrl, imageService: viewModel.imageService)
     }
 }
