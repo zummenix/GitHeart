@@ -8,7 +8,7 @@
 import UIKit
 
 class Router {
-    private let imageService = ImageService(session: URLSession.shared, cache: MemoryCache(maxByteSize: 2 * 1024 * 1024))
+    private let imageService = ImageService(session: URLSession.shared, cache: MemoryCache(maxByteSize: 10 * 1024 * 1024))
 
     let window: UIWindow
     let api: API
@@ -20,7 +20,7 @@ class Router {
     }
 
     func start() {
-        let controller = UsersListViewController(viewModel: UsersListViewModel(api: api))
+        let controller = UsersListViewController(viewModel: UsersListViewModel(api: api, imageService: imageService))
         controller.didTapUser = { [weak self] user in self?.showUserDetails(user) }
         window.rootViewController = UINavigationController(rootViewController: controller)
     }

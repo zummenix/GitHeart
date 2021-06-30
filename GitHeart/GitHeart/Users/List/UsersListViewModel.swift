@@ -9,18 +9,19 @@ import Foundation
 
 class UsersListViewModel {
     private let api: API
+    private let imageService: ImageService
     private var users: [User] = []
     private var searchText: String = ""
     private var page: Int = 1
     private var isLoading: Bool = false
     private var isLastPage: Bool = false
     private var searchWorkItem: DispatchWorkItem?
-    private let thumbnailImageService = ImageService(session: URLSession.shared, cache: MemoryCache(maxByteSize: 10 * 1024 * 1024))
 
     var didUpdateState: (() -> Void)?
 
-    init(api: API) {
+    init(api: API, imageService: ImageService) {
         self.api = api
+        self.imageService = imageService
     }
 
     func load() {
@@ -72,7 +73,7 @@ class UsersListViewModel {
 
     func userViewModel(at index: Int) -> UserViewModel {
         let user = self.user(at: index)
-        return UserViewModel(login: user.login, avatarUrl: user.avatarUrl, imageService: thumbnailImageService)
+        return UserViewModel(login: user.login, avatarUrl: user.avatarUrl, imageService: imageService)
     }
 
     func user(at index: Int) -> User {
