@@ -12,9 +12,14 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 60.0))
-        searchBar.placeholder = "Search GitHub Users"
+        searchBar.placeholder = "Search by name or nickname"
         searchBar.searchBarStyle = .minimal
         searchBar.delegate = self
+        searchBar.autocapitalizationType = .none
+        searchBar.autocorrectionType = .no
+        searchBar.spellCheckingType = .no
+        searchBar.returnKeyType = .done
+        searchBar.enablesReturnKeyAutomatically = false
         return searchBar
     }()
 
@@ -30,6 +35,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.register(UserCell.self, forCellReuseIdentifier: UserCell.identifier)
         tableView.tableHeaderView = searchBar
         tableView.tableFooterView = UIView()
+        tableView.keyboardDismissMode = .interactive
         return tableView
     }()
 
@@ -109,5 +115,9 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         viewModel.applySearch(text: "")
+    }
+
+    func searchBarSearchButtonClicked(_: UISearchBar) {
+        view.endEditing(true)
     }
 }
