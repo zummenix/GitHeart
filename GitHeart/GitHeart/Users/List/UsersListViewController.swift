@@ -10,6 +10,13 @@ import UIKit
 class UsersListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     private let viewModel: UsersListViewModel
 
+    private let activityIndicatorView: LineActivityIndicatorView = {
+        let indicator = LineActivityIndicatorView(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 3.0))
+        indicator.barColor = Colors.tintColor
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 60.0))
         searchBar.placeholder = "Search by name or nickname"
@@ -55,7 +62,15 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         view.backgroundColor = Colors.background
         view.addSubview(tableView)
+        view.addSubview(activityIndicatorView)
 
+        NSLayoutConstraint.activate([
+            activityIndicatorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            activityIndicatorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            activityIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+
+        viewModel.didChangeLoading = { [weak self] isLoading in self?.setActivityIndicator(visible: isLoading) }
         viewModel.didUpdateUsersList = { [weak self] in self?.tableView.reloadData() }
         viewModel.didFail = { [weak self] error in self?.show(error: error) }
 
@@ -77,6 +92,15 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
             self?.viewModel.load()
         })
         present(alert, animated: true, completion: nil)
+    }
+
+    private func setActivityIndicator(visible: Bool) {
+        activityIndicatorView.isHidden = !visible
+        if visible {
+            activityIndicatorView.startAnimating()
+        } else {
+            activityIndicatorView.stopAnimating()
+        }
     }
 
     // MARK: - UITableViewDelegate, UITableViewDataSource

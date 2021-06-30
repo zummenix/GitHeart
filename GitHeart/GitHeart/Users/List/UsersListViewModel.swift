@@ -13,10 +13,17 @@ class UsersListViewModel {
     private var users: [User] = []
     private var searchText: String = ""
     private var page: Int = 1
-    private var isLoading: Bool = false
+
     private var isLastPage: Bool = false
     private var searchWorkItem: DispatchWorkItem?
 
+    private(set) var isLoading: Bool = false {
+        didSet {
+            didChangeLoading?(isLoading)
+        }
+    }
+
+    var didChangeLoading: ((Bool) -> Void)?
     var didUpdateUsersList: (() -> Void)?
     var didFail: ((Error) -> Void)?
 
@@ -28,7 +35,6 @@ class UsersListViewModel {
     func load() {
         guard !isLoading else { return }
         isLoading = true
-        print("Loading page \(page), search: \(searchText)")
         api.users(searchTerm: searchText, page: page) { [weak self] result in
             guard let self = self else { return }
             if self.page == 1 {
