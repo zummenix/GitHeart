@@ -50,6 +50,7 @@ class UserDetailsViewController: UIViewController {
     private let followersFollowingReposLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

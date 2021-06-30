@@ -35,7 +35,7 @@ class UserDetailsViewModel {
             string.append(compoundString(left: String(userDetails.followers), right: "followers"))
             string.append(separatorString())
             string.append(compoundString(left: String(userDetails.following), right: "following"))
-            string.append(separatorString())
+            string.append(NSAttributedString(string: "\n"))
             string.append(compoundString(left: String(userDetails.publicRepos), right: "repositories"))
         }
         return string.centered
