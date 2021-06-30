@@ -73,12 +73,9 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     private func show(error: Error) {
-        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Try Again", style: .default, handler: { [weak self] _ in
+        let alert = UIAlertController.error(error, tryAgainHandler: { [weak self] in
             self?.viewModel.load()
-        }))
-
+        })
         present(alert, animated: true, completion: nil)
     }
 

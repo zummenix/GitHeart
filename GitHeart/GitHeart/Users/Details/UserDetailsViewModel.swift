@@ -13,6 +13,9 @@ class UserDetailsViewModel {
     let imageService: ImageService
     private var userDetails: UserDetails?
 
+    var didLoad: (() -> Void)?
+    var didFail: ((Error) -> Void)?
+
     var avatarUrl: URL? {
         return userDetails?.avatarUrl ?? user.avatarUrl
     }
@@ -47,14 +50,14 @@ class UserDetailsViewModel {
         self.imageService = imageService
     }
 
-    func load(completion: @escaping (Result<Void, Error>) -> Void) {
-        api.userDetails(login: user.login) { result in
+    func load() {
+        api.userDetails(login: user.login) { [weak self] result in
             switch result {
             case let .success(userDetails):
-                self.userDetails = userDetails
-                completion(.success(()))
+                self?.userDetails = userDetails
+                self?.didLoad?()
             case let .failure(error):
-                completion(.failure(error))
+                self?.didFail?(error)
             }
         }
     }

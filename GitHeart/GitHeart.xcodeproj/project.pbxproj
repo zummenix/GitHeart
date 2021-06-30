@@ -25,6 +25,7 @@
 		4D238F1726837B9400DC6397 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D238F1626837B9400DC6397 /* Assets.xcassets */; };
 		4D238F1A26837B9400DC6397 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D238F1826837B9400DC6397 /* LaunchScreen.storyboard */; };
 		4D238F7E26837ED100DC6397 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D238F7D26837ED100DC6397 /* Router.swift */; };
+		4D4000F0268CB7E400FCC612 /* UIAlertController+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4000EF268CB7E400FCC612 /* UIAlertController+Ex.swift */; };
 		4D79B32E268896AE008C1319 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B32D268896AE008C1319 /* UserDetails.swift */; };
 		4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */; };
 /* End PBXBuildFile section */
@@ -62,6 +63,7 @@
 		4D238F2026837B9400DC6397 /* GitHeartTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GitHeartTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D238F2626837B9400DC6397 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D238F7D26837ED100DC6397 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		4D4000EF268CB7E400FCC612 /* UIAlertController+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Ex.swift"; sourceTree = "<group>"; };
 		4D79B32D268896AE008C1319 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Ex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -181,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */,
+				4D4000EF268CB7E400FCC612 /* UIAlertController+Ex.swift */,
 				4D1149CD268B6A4400560AA6 /* Data+Ex.swift */,
 			);
 			path = Extensions;
@@ -323,6 +326,7 @@
 				4D1149C1268A002B00560AA6 /* API.swift in Sources */,
 				4D0A9EE82688583A006D0F5A /* UserViewModel.swift in Sources */,
 				4D0A9EED268858CB006D0F5A /* User.swift in Sources */,
+				4D4000F0268CB7E400FCC612 /* UIAlertController+Ex.swift in Sources */,
 				4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */,
 				4D0A9ECA2687027B006D0F5A /* UsersListViewController.swift in Sources */,
 			);

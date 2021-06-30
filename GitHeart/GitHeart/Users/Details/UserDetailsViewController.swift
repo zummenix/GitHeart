@@ -99,11 +99,12 @@ class UserDetailsViewController: UIViewController {
             followersFollowingReposLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
         ])
 
-        viewModel.load { [weak self] _ in
-            self?.reloadData()
-        }
-
         reloadData()
+
+        viewModel.didLoad = { [weak self] in self?.reloadData() }
+        viewModel.didFail = { [weak self] error in self?.show(error: error) }
+
+        viewModel.load()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -114,6 +115,13 @@ class UserDetailsViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         avatarImageView.layer.cornerRadius = avatarImageView.frame.size.height / 2.0
+    }
+
+    private func show(error: Error) {
+        let alert = UIAlertController.error(error, tryAgainHandler: { [weak self] in
+            self?.viewModel.load()
+        })
+        present(alert, animated: true, completion: nil)
     }
 
     private func reloadData() {
