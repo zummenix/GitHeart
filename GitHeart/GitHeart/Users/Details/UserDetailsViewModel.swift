@@ -13,6 +13,13 @@ class UserDetailsViewModel {
     let imageService: ImageService
     private var userDetails: UserDetails?
 
+    private(set) var isLoading: Bool = false {
+        didSet {
+            didChangeLoading?(isLoading)
+        }
+    }
+
+    var didChangeLoading: ((Bool) -> Void)?
     var didLoad: (() -> Void)?
     var didFail: ((Error) -> Void)?
 
@@ -51,7 +58,10 @@ class UserDetailsViewModel {
     }
 
     func load() {
+        guard !isLoading else { return }
+        isLoading = true
         api.userDetails(login: user.login) { [weak self] result in
+            self?.isLoading = false
             switch result {
             case let .success(userDetails):
                 self?.userDetails = userDetails

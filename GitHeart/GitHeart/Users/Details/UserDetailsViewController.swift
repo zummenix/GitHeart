@@ -24,8 +24,16 @@ class UserDetailsViewController: UIViewController {
         label.textAlignment = .center
         label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
         label.textColor = Colors.primaryTextColor
+        label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .gray)
+        indicator.isHidden = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
     }()
 
     private let loginLabel: UILabel = {
@@ -72,6 +80,7 @@ class UserDetailsViewController: UIViewController {
 
         view.addSubview(avatarImageView)
         view.addSubview(nameLabel)
+        view.addSubview(activityIndicatorView)
         view.addSubview(loginLabel)
         view.addSubview(bioLabel)
         view.addSubview(followersFollowingReposLabel)
@@ -85,6 +94,9 @@ class UserDetailsViewController: UIViewController {
             nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 20.0),
             nameLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             nameLabel.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+
+            activityIndicatorView.centerXAnchor.constraint(equalTo: nameLabel.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
 
             loginLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 2.0),
             loginLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
@@ -101,6 +113,7 @@ class UserDetailsViewController: UIViewController {
 
         reloadData()
 
+        viewModel.didChangeLoading = { [weak self] isVisible in self?.setActivityIndicator(visible: isVisible) }
         viewModel.didLoad = { [weak self] in self?.reloadData() }
         viewModel.didFail = { [weak self] error in self?.show(error: error) }
 
@@ -130,5 +143,18 @@ class UserDetailsViewController: UIViewController {
         loginLabel.text = viewModel.login
         bioLabel.text = viewModel.bio
         followersFollowingReposLabel.attributedText = viewModel.followersFollowingRepos
+    }
+
+    private func setActivityIndicator(visible: Bool) {
+        activityIndicatorView.isHidden = !visible
+        nameLabel.isHidden = visible
+        if visible {
+            if nameLabel.text?.isEmpty ?? true {
+                nameLabel.text = " " // The label should have the height to avoid jitter and to position activity indicator.
+            }
+            activityIndicatorView.startAnimating()
+        } else {
+            activityIndicatorView.stopAnimating()
+        }
     }
 }
