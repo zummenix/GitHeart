@@ -9,14 +9,19 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    private let imageCache = MemoryCache<URL, Data>(maxByteSize: 10 * 1024 * 1024)
     private var router: Router!
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow()
         window!.makeKeyAndVisible()
-        router = Router(window: window!)
+        router = Router(window: window!, imageService: ImageService(session: URLSession.shared, cache: imageCache))
         router.start()
         return true
+    }
+
+    func applicationDidReceiveMemoryWarning(_: UIApplication) {
+        imageCache.clear()
     }
 }

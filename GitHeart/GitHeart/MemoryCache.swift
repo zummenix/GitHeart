@@ -42,6 +42,11 @@ class MemoryCache<Key: Hashable, Value: ByteSizable> {
         }
     }
 
+    func clear() {
+        list.removeAll(keepingCapacity: false)
+        totalSize = 0
+    }
+
     private func index(forKey key: Key) -> Int? {
         return list.lazy.enumerated().reversed().first(where: { $0.1.0 == key })?.offset
     }

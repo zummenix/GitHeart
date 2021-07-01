@@ -8,13 +8,13 @@
 import UIKit
 
 class Router {
-    private let imageService = ImageService(session: URLSession.shared, cache: MemoryCache(maxByteSize: 10 * 1024 * 1024))
-
     let window: UIWindow
+    let imageService: ImageService
     let api: API
 
-    init(window: UIWindow) {
+    init(window: UIWindow, imageService: ImageService) {
         self.window = window
+        self.imageService = imageService
         api = API()
         window.tintColor = Colors.tintColor
     }
