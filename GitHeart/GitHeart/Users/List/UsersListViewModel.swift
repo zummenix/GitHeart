@@ -49,9 +49,9 @@ class UsersListViewModel {
             }
             self.isLoading = false
             switch result {
-            case let .success(paginatedUsers):
-                self.users.append(contentsOf: paginatedUsers.items)
-                self.isLastPage = paginatedUsers.items.isEmpty
+            case let .success(users):
+                self.users.append(contentsOf: users)
+                self.isLastPage = users.isEmpty
                 self.didUpdateUsersList?()
             case let .failure(error):
                 self.didFail?(error)

@@ -29,11 +29,11 @@ class API {
         self.session = session
     }
 
-    func users(searchTerm: String, page: Int, completion: @escaping ((Result<PaginatedUsers, Error>) -> Void)) {
+    func users(searchTerm: String, page: Int, completion: @escaping ((Result<[User], Error>) -> Void)) {
         let query = searchTerm.isEmpty ? "followers:>1000" : searchTerm
         get(request: request(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { result in
             DispatchQueue.main.async {
-                completion(result)
+                completion(result.map { (paginated: PaginatedUsers) in paginated.items })
             }
         })
     }

@@ -14,7 +14,5 @@ struct User: Codable {
 }
 
 struct PaginatedUsers: Codable {
-    let totalCount: Int
-    let incompleteResults: Bool
     let items: [User]
 }
