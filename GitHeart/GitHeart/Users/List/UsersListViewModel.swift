@@ -23,6 +23,13 @@ class UsersListViewModel {
         }
     }
 
+    var statusText: String? {
+        if users.isEmpty {
+            return isLoading ? "Loading..." : "Nothing Found"
+        }
+        return nil
+    }
+
     var didChangeLoading: ((Bool) -> Void)?
     var didUpdateUsersList: (() -> Void)?
     var didFail: ((Error) -> Void)?

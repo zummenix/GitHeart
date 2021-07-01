@@ -46,6 +46,17 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         return tableView
     }()
 
+    private let statusLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+        label.textColor = Colors.primaryTextColor.withAlphaComponent(0.5)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private var statusLabelCenterYConstraint: NSLayoutConstraint?
+
     var didTapUser: ((User) -> Void)?
 
     init(viewModel: UsersListViewModel) {
@@ -70,8 +81,14 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
             activityIndicatorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
 
-        viewModel.didChangeLoading = { [weak self] isLoading in self?.setActivityIndicator(visible: isLoading) }
-        viewModel.didUpdateUsersList = { [weak self] in self?.tableView.reloadData() }
+        viewModel.didChangeLoading = { [weak self] isLoading in
+            self?.updateStatusLabel()
+            self?.setActivityIndicator(visible: isLoading)
+        }
+        viewModel.didUpdateUsersList = { [weak self] in
+            self?.updateStatusLabel()
+            self?.tableView.reloadData()
+        }
         viewModel.didFail = { [weak self] error in self?.show(error: error) }
 
         viewModel.load()
@@ -103,6 +120,29 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
 
+    private func updateStatusLabel() {
+        if let statusText = viewModel.statusText {
+            statusLabel.text = statusText
+            if statusLabel.superview == nil {
+                view.addSubview(statusLabel)
+                statusLabelCenterYConstraint = statusLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+                NSLayoutConstraint.activate([
+                    statusLabelCenterYConstraint!,
+                    statusLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30.0),
+                    statusLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30.0),
+                ])
+                syncStatusLabelPositionWithTableView()
+            }
+        } else {
+            statusLabel.removeFromSuperview()
+            statusLabelCenterYConstraint = nil
+        }
+    }
+
+    private func syncStatusLabelPositionWithTableView() {
+        statusLabelCenterYConstraint?.constant = (tableView.contentOffset.y + view.safeAreaInsets.top) * -1.0
+    }
+
     // MARK: - UITableViewDelegate, UITableViewDataSource
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -121,6 +161,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        syncStatusLabelPositionWithTableView()
         let bottomPosition = scrollView.contentOffset.y + scrollView.bounds.size.height
         if bottomPosition > scrollView.contentSize.height - 200.0 {
             viewModel.loadNextPageIfPossible()
