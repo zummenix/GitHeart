@@ -15,8 +15,10 @@ class ImageService {
         self.session = session
         self.cache = cache
     }
+}
 
-    func imageBy(url: URL, completion: @escaping (UIImage?) -> Void) -> URLSessionTask? {
+extension ImageService: ImageProvider {
+    func imageBy(url: URL, completion: @escaping (UIImage?) -> Void) -> ImageProviderTask? {
         if let data = cache.value(forKey: url), let image = UIImage(data: data) {
             completion(image)
             return nil
@@ -50,3 +52,5 @@ class ImageService {
         }
     }
 }
+
+extension URLSessionTask: ImageProviderTask {}

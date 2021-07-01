@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow()
         window!.makeKeyAndVisible()
-        router = Router(window: window!, imageService: ImageService(session: URLSession.shared, cache: imageCache))
+        router = Router(window: window!, imageProvider: ImageService(session: URLSession.shared, cache: imageCache))
         router.start()
         return true
     }

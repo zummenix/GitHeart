@@ -8,7 +8,7 @@
 import UIKit
 
 class WebImageView: UIImageView {
-    private var task: URLSessionTask?
+    private var task: ImageProviderTask?
 
     override var image: UIImage? {
         set {
@@ -20,10 +20,10 @@ class WebImageView: UIImageView {
         }
     }
 
-    func setImage(url: URL?, imageService: ImageService) {
+    func setImage(url: URL?, imageProvider: ImageProvider) {
         image = nil
         guard let url = url else { return }
-        task = imageService.imageBy(url: url, completion: { [weak self] image in
+        task = imageProvider.imageBy(url: url, completion: { [weak self] image in
             self?.image = image
         })
     }

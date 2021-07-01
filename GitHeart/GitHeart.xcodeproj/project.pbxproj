@@ -27,6 +27,7 @@
 		4D238F7E26837ED100DC6397 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D238F7D26837ED100DC6397 /* Router.swift */; };
 		4D4000F0268CB7E400FCC612 /* UIAlertController+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4000EF268CB7E400FCC612 /* UIAlertController+Ex.swift */; };
 		4D4000F4268CC4A300FCC612 /* LineActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4000F3268CC4A300FCC612 /* LineActivityIndicatorView.swift */; };
+		4D6FEBC0268E0E6A00DA3757 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */; };
 		4D79B32E268896AE008C1319 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B32D268896AE008C1319 /* UserDetails.swift */; };
 		4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */; };
 /* End PBXBuildFile section */
@@ -66,6 +67,7 @@
 		4D238F7D26837ED100DC6397 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		4D4000EF268CB7E400FCC612 /* UIAlertController+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Ex.swift"; sourceTree = "<group>"; };
 		4D4000F3268CC4A300FCC612 /* LineActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineActivityIndicatorView.swift; sourceTree = "<group>"; };
+		4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
 		4D79B32D268896AE008C1319 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Ex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,7 +143,7 @@
 				4D0A9ED5268705A4006D0F5A /* Colors.swift */,
 				4D1149C0268A002B00560AA6 /* API.swift */,
 				4D1149C9268B63A200560AA6 /* MemoryCache.swift */,
-				4D1149D3268B6B7B00560AA6 /* ImageService.swift */,
+				4D6FEBBC268E0E4700DA3757 /* ImageService */,
 				4D79B3312688A7B4008C1319 /* Extensions */,
 				4D1149C4268B61A700560AA6 /* Views */,
 				4D0A9EEB268858B8006D0F5A /* Models */,
@@ -160,6 +162,15 @@
 				4D238F2626837B9400DC6397 /* Info.plist */,
 			);
 			path = GitHeartTests;
+			sourceTree = "<group>";
+		};
+		4D6FEBBC268E0E4700DA3757 /* ImageService */ = {
+			isa = PBXGroup;
+			children = (
+				4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */,
+				4D1149D3268B6B7B00560AA6 /* ImageService.swift */,
+			);
+			path = ImageService;
 			sourceTree = "<group>";
 		};
 		4D79B32526889339008C1319 /* List */ = {
@@ -314,6 +325,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D6FEBC0268E0E6A00DA3757 /* ImageProvider.swift in Sources */,
 				4D238F7E26837ED100DC6397 /* Router.swift in Sources */,
 				4D1149D4268B6B7B00560AA6 /* ImageService.swift in Sources */,
 				4D0A9EDA268706C6006D0F5A /* UsersListViewModel.swift in Sources */,

@@ -9,7 +9,7 @@ import Foundation
 
 class UsersListViewModel {
     private let api: API
-    private let imageService: ImageService
+    private let imageProvider: ImageProvider
     private var users: [User] = []
     private var searchText: String = ""
     private var page: Int = 1
@@ -34,9 +34,9 @@ class UsersListViewModel {
     var didUpdateUsersList: (() -> Void)?
     var didFail: ((Error) -> Void)?
 
-    init(api: API, imageService: ImageService) {
+    init(api: API, imageProvider: ImageProvider) {
         self.api = api
-        self.imageService = imageService
+        self.imageProvider = imageProvider
     }
 
     func load() {
@@ -88,7 +88,7 @@ class UsersListViewModel {
 
     func userViewModel(at index: Int) -> UserViewModel {
         let user = self.user(at: index)
-        return UserViewModel(login: user.login, avatarUrl: user.avatarUrl, imageService: imageService)
+        return UserViewModel(login: user.login, avatarUrl: user.avatarUrl, imageProvider: imageProvider)
     }
 
     func user(at index: Int) -> User {
