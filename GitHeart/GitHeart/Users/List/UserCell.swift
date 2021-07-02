@@ -31,6 +31,7 @@ class UserCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         backgroundColor = Colors.background
+        accessoryType = .disclosureIndicator
 
         backgroundView = UIView()
         backgroundView?.backgroundColor = Colors.background
