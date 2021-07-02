@@ -98,7 +98,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.setNavigationBarTransparent(false)
+        updateNavigationBarTransparency()
     }
 
     override func viewDidLayoutSubviews() {
@@ -145,6 +145,11 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         statusLabelCenterYConstraint?.constant = (tableView.contentOffset.y + view.safeAreaInsets.top) * -1.0
     }
 
+    private func updateNavigationBarTransparency() {
+        let y = tableView.contentOffset.y + view.safeAreaInsets.top
+        navigationController?.navigationBar.setNavigationBarTransparent(y <= 0.0)
+    }
+
     // MARK: - UITableViewDelegate, UITableViewDataSource
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
@@ -164,6 +169,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         syncStatusLabelPositionWithTableView()
+        updateNavigationBarTransparency()
         let bottomPosition = scrollView.contentOffset.y + scrollView.bounds.size.height
         if bottomPosition > scrollView.contentSize.height - 200.0 {
             viewModel.loadNextPageIfPossible()
