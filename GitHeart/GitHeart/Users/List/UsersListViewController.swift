@@ -164,6 +164,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        view.endEditing(true) // End editing in search bar.
         didTapUser?(viewModel.user(at: indexPath.row))
     }
 
