@@ -37,8 +37,8 @@ extension ImageService: ImageProvider {
                     return
                 }
                 if let data = data, let image = UIImage(data: data) {
+                    self?.cache.set(value: data, for: url)
                     DispatchQueue.main.async {
-                        self?.cache.set(value: data, for: url)
                         completion(image)
                     }
                 } else {
