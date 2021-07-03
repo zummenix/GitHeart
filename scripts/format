@@ -2,7 +2,7 @@
 
 if command -v mint &> /dev/null; then
     git diff --diff-filter=d --name-only | grep -e '\(.*\).swift$' | while read line; do
-        xcrun --sdk macosx mint run swiftformat  --swiftversion 5.0 "../${line}";
+        xcrun --sdk macosx mint run swiftformat  --swiftversion 5.0 "${line}";
     done
 else
     echo "warning: mint is not installed, autoformat is disabled."
