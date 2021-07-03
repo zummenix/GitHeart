@@ -20,16 +20,19 @@ struct APIError: LocalizedError {
 /// Implements the minimum of necessary logic for the project to work with the github API.
 class API {
     private static let errorsByStatusCode: [Int: APIError] = [
+        401: APIError(message: "Unauthorized"),
         403: APIError(message: "Rate Limited or Forbidden"),
         422: APIError(message: "Unprocessable Entity"),
         503: APIError(message: "Service Unavailable"),
     ]
 
     private let baseURL: URL
+    private let env: Env
     private let session: URLSession
 
-    init(baseURL: URL = URL(string: "https://api.github.com")!, session: URLSession = URLSession.shared) {
+    init(baseURL: URL = URL(string: "https://api.github.com")!, env: Env = Env(), session: URLSession = URLSession.shared) {
         self.baseURL = baseURL
+        self.env = env
         self.session = session
     }
 
@@ -42,6 +45,9 @@ class API {
         }
         var request = URLRequest(url: urlComponents.url!)
         request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
+        if !env.githubAccessToken.isEmpty {
+            request.setValue("token \(env.githubAccessToken)", forHTTPHeaderField: "Authorization")
+        }
         return request
     }
 
