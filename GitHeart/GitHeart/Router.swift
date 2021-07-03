@@ -20,13 +20,15 @@ class Router {
     }
 
     func start() {
-        let controller = UsersListViewController(viewModel: UsersListViewModel(api: api, imageProvider: imageProvider))
+        let viewModel = UsersListViewModel(usersListProvider: api, imageProvider: imageProvider)
+        let controller = UsersListViewController(viewModel: viewModel)
         controller.didTapUser = { [weak self] user in self?.showUserDetails(user) }
         window.rootViewController = UINavigationController(rootViewController: controller)
     }
 
     private func showUserDetails(_ user: User) {
-        let controller = UserDetailsViewController(viewModel: UserDetailsViewModel(user: user, api: api, imageProvider: imageProvider))
+        let viewModel = UserDetailsViewModel(user: user, userDetailsProvider: api, imageProvider: imageProvider)
+        let controller = UserDetailsViewController(viewModel: viewModel)
         window.rootViewController?.show(controller, sender: nil)
     }
 }

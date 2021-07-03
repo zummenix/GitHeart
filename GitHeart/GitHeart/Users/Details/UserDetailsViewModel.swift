@@ -9,7 +9,7 @@ import UIKit
 
 class UserDetailsViewModel {
     private let user: User
-    private let api: API
+    private let userDetailsProvider: UserDetailsProvider
     let imageProvider: ImageProvider
     private var userDetails: UserDetails?
 
@@ -51,16 +51,16 @@ class UserDetailsViewModel {
         return string.centered
     }
 
-    init(user: User, api: API, imageProvider: ImageProvider) {
+    init(user: User, userDetailsProvider: UserDetailsProvider, imageProvider: ImageProvider) {
         self.user = user
-        self.api = api
+        self.userDetailsProvider = userDetailsProvider
         self.imageProvider = imageProvider
     }
 
     func load() {
         guard !isLoading else { return }
         isLoading = true
-        api.userDetails(login: user.login) { [weak self] result in
+        userDetailsProvider.userDetails(login: user.login) { [weak self] result in
             self?.isLoading = false
             switch result {
             case let .success(userDetails):

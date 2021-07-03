@@ -8,7 +8,7 @@
 import Foundation
 
 class UsersListViewModel {
-    private let api: API
+    private let usersListProvider: UsersListProvider
     private let imageProvider: ImageProvider
     private var users: [User] = []
     private var searchText: String = ""
@@ -34,15 +34,15 @@ class UsersListViewModel {
     var didUpdateUsersList: (() -> Void)?
     var didFail: ((Error) -> Void)?
 
-    init(api: API, imageProvider: ImageProvider) {
-        self.api = api
+    init(usersListProvider: UsersListProvider, imageProvider: ImageProvider) {
+        self.usersListProvider = usersListProvider
         self.imageProvider = imageProvider
     }
 
     func load() {
         guard !isLoading else { return }
         isLoading = true
-        api.users(searchTerm: searchText, page: page) { [weak self] result in
+        usersListProvider.users(searchTerm: searchText, page: page) { [weak self] result in
             guard let self = self else { return }
             if self.page == 1 {
                 self.users = []
