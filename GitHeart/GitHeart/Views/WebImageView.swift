@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// A image view that is able to show an image from the web.
 class WebImageView: UIImageView {
     private var task: ImageProviderTask?
 
@@ -20,6 +21,7 @@ class WebImageView: UIImageView {
         }
     }
 
+    /// Sets an image by the `url` using an `imageProvider`.
     func setImage(url: URL?, imageProvider: ImageProvider) {
         image = nil
         guard let url = url else { return }

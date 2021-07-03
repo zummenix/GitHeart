@@ -8,6 +8,7 @@
 import UIKit
 
 extension UINavigationBar {
+    /// Switchs the transparency for the navigaton bar.
     func setNavigationBarTransparent(_ isTransparent: Bool) {
         if isTransparent {
             setBackgroundImage(UIImage(), for: .default)

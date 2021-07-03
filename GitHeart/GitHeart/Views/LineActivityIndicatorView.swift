@@ -8,6 +8,9 @@
 import CoreGraphics
 import UIKit
 
+/// An activity indicator view as line to indicate processing.
+///
+/// The animation duration adapts automatically by calculating the duration of previous processing task.
 class LineActivityIndicatorView: UIView {
     private let preferredHeight: CGFloat
 
@@ -20,8 +23,17 @@ class LineActivityIndicatorView: UIView {
         return layer
     }()
 
-    var defaultAnimationDuration: TimeInterval = 2.0
+    /// The default animation of the bar.
+    ///
+    /// By updating this property you will reset the automatically calculated duraton.
+    var defaultAnimationDuration: TimeInterval = 2.0 {
+        didSet {
+            startAnimationDate = nil
+            stopAnimationDate = nil
+        }
+    }
 
+    /// The color of the bar.
     var barColor = UIColor.systemBlue {
         didSet {
             barLayer.backgroundColor = barColor.cgColor
@@ -48,6 +60,7 @@ class LineActivityIndicatorView: UIView {
         return CGSize(width: UIView.noIntrinsicMetric, height: preferredHeight)
     }
 
+    /// Starts the animation of a progressing bar.
     func startAnimating() {
         // Calculate the animation duration based on previous runs assuming it will be approx the same.
         var duration = defaultAnimationDuration
@@ -66,6 +79,7 @@ class LineActivityIndicatorView: UIView {
         startAnimationDate = Date()
     }
 
+    /// Stops the animation.
     func stopAnimating() {
         barLayer.removeAllAnimations()
         setNeedsLayout()
