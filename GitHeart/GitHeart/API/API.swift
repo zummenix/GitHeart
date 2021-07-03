@@ -20,6 +20,7 @@ struct APIError: LocalizedError {
 /// Implements the minimum of necessary logic for the project to work with the github API.
 class API {
     private static let errorsByStatusCode: [Int: APIError] = [
+        403: APIError(message: "Rate Limited or Forbidden"),
         422: APIError(message: "Unprocessable Entity"),
         503: APIError(message: "Service Unavailable"),
     ]

@@ -12,7 +12,7 @@ class UsersListViewModel {
     private let imageProvider: ImageProvider
     private var users: [User] = []
     private var searchText: String = ""
-    private var page: Int = 1
+    private var page: Int = 1 // The number of a page that will be requested next.
 
     private var isLastPage: Bool = false
     private var searchWorkItem: DispatchWorkItem?
@@ -40,7 +40,7 @@ class UsersListViewModel {
     }
 
     func load() {
-        guard !isLoading else { return }
+        guard !isLoading, !isLastPage else { return }
         isLoading = true
         usersListProvider.users(searchTerm: searchText, page: page) { [weak self] result in
             guard let self = self else { return }
@@ -52,17 +52,12 @@ class UsersListViewModel {
             case let .success(users):
                 self.users.append(contentsOf: users)
                 self.isLastPage = users.isEmpty
+                self.page += 1
                 self.didUpdateUsersList?()
             case let .failure(error):
                 self.didFail?(error)
             }
         }
-    }
-
-    func loadNextPageIfPossible() {
-        guard !isLoading, !isLastPage else { return }
-        page += 1
-        load()
     }
 
     func applySearch(text: String) {

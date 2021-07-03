@@ -173,7 +173,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         updateNavigationBarTransparency()
         let bottomPosition = scrollView.contentOffset.y + scrollView.bounds.size.height
         if bottomPosition > scrollView.contentSize.height - 200.0 {
-            viewModel.loadNextPageIfPossible()
+            viewModel.load()
         }
     }
 
