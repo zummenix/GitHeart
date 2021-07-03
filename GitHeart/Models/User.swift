@@ -7,12 +7,14 @@
 
 import Foundation
 
+/// A model of a user in a list.
 struct User: Codable {
     let id: Int
     let avatarUrl: URL?
     let login: String
 }
 
+/// A model with items of users.
 struct PaginatedUsers: Codable {
     let items: [User]
 }

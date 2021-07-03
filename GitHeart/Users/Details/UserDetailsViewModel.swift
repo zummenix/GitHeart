@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// A view model for the user details.
 class UserDetailsViewModel {
     private let user: User
     private let userDetailsProvider: UserDetailsProvider
@@ -14,34 +15,44 @@ class UserDetailsViewModel {
     private var imageProviderTask: ImageProviderTask?
     private var userDetails: UserDetails?
 
+    /// Shows whether the loading is in progress.
     private(set) var isLoading: Bool = false {
         didSet {
             didChangeLoading?(isLoading)
         }
     }
 
+    /// Called when the loading status changes.
     var didChangeLoading: ((Bool) -> Void)?
+    /// Called when loading is done.
     var didLoad: (() -> Void)?
+    /// Called when an error has occurred.
     var didFail: ((Error) -> Void)?
 
+    /// The avatar of a user.
     private(set) var avatarImage: UIImage?
 
+    /// The name of a user.
     var name: String {
         return userDetails?.name ?? ""
     }
 
+    /// The login of a user.
     var login: String {
         return user.login
     }
 
+    /// The bio of a user.
     var bio: String {
         return userDetails?.bio ?? ""
     }
 
+    /// The url of a user's page on GitHub.
     var userUrl: URL? {
         return userDetails?.htmlUrl
     }
 
+    /// The formatted string with user's followers, following and repositories counts.
     var followersFollowingRepos: NSAttributedString {
         let string = NSMutableAttributedString()
         if let userDetails = userDetails {
@@ -60,6 +71,7 @@ class UserDetailsViewModel {
         self.imageProvider = imageProvider
     }
 
+    /// Starts loading user details from the web.
     func load() {
         guard !isLoading else { return }
         isLoading = true

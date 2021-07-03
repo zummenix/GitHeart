@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A view model of a user to show it in a list.
 struct UserViewModel {
     let login: String
     let avatarUrl: URL?

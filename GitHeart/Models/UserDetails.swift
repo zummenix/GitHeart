@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A model of a user details.
 struct UserDetails: Decodable {
     let name: String?
     let login: String

@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Responsible for presenting and managing view controllers.
 class Router {
     let window: UIWindow
     let imageProvider: ImageProvider

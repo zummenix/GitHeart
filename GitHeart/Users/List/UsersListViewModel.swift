@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A view model for the users' list.
 class UsersListViewModel {
     private let usersListProvider: UsersListProvider
     private let imageProvider: ImageProvider
@@ -17,12 +18,14 @@ class UsersListViewModel {
     private var isLastPage: Bool = false
     private var searchWorkItem: DispatchWorkItem?
 
+    /// Shows whether the loading is in progress.
     private(set) var isLoading: Bool = false {
         didSet {
             didChangeLoading?(isLoading)
         }
     }
 
+    /// The status text related to loading and empty state.
     var statusText: String? {
         if users.isEmpty {
             return isLoading ? "Loading..." : "Nothing Found"
@@ -30,8 +33,11 @@ class UsersListViewModel {
         return nil
     }
 
+    /// Called when the loading status changes.
     var didChangeLoading: ((Bool) -> Void)?
+    /// Called when there are changes in the list of users.
     var didUpdateUsersList: (() -> Void)?
+    /// Called when an error has occurred.
     var didFail: ((Error) -> Void)?
 
     init(usersListProvider: UsersListProvider, imageProvider: ImageProvider) {
@@ -39,6 +45,9 @@ class UsersListViewModel {
         self.imageProvider = imageProvider
     }
 
+    /// Starts loading users from the web.
+    ///
+    /// The method does nothing if already loads data or if it is a last page.
     func load() {
         guard !isLoading, !isLastPage else { return }
         isLoading = true
@@ -60,6 +69,9 @@ class UsersListViewModel {
         }
     }
 
+    /// Applies search text, and starts loading.
+    ///
+    /// The method throttles to mitigate rate limiting issues and improve performance.
     func applySearch(text: String) {
         searchText = text
         page = 1
@@ -77,15 +89,18 @@ class UsersListViewModel {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: searchWorkItem!)
     }
 
+    /// Returns number of users in the list.
     func numberOfUsers() -> Int {
         return users.count
     }
 
+    /// Returns a view model of a user to show in a cell.
     func userViewModel(at index: Int) -> UserViewModel {
         let user = self.user(at: index)
         return UserViewModel(login: user.login, avatarUrl: user.avatarUrl, imageProvider: imageProvider)
     }
 
+    /// Returns model of a user.
     func user(at index: Int) -> User {
         return users[index]
     }

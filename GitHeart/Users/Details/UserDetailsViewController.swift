@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// A view controller for the user's details.
 class UserDetailsViewController: UIViewController {
     private let viewModel: UserDetailsViewModel
 
@@ -68,6 +69,7 @@ class UserDetailsViewController: UIViewController {
         return label
     }()
 
+    /// Called when user taps share user's GitHub page.
     var didTapShareUserUrl: ((URL) -> Void)?
 
     init(viewModel: UserDetailsViewModel) {
@@ -160,7 +162,7 @@ class UserDetailsViewController: UIViewController {
         nameLabel.isHidden = visible
         if visible {
             if nameLabel.text?.isEmpty ?? true {
-                nameLabel.text = " " // The label should have the height to avoid jitter and to position activity indicator.
+                nameLabel.text = " " // The label should have the height to avoid jitter and to position the activity indicator.
             }
             activityIndicatorView.startAnimating()
         } else {

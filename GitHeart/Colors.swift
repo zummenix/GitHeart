@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Colors used throughout the app.
 enum Colors {
     static let tintColor = UIColor(named: "tint")!
     static let background = UIColor(named: "background")!

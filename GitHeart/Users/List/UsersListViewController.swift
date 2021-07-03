@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// A view controlelr for the list of users.
 class UsersListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     private let viewModel: UsersListViewModel
 
@@ -57,6 +58,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private var statusLabelCenterYConstraint: NSLayoutConstraint?
 
+    /// Called when the user taps a cell with a user.
     var didTapUser: ((User) -> Void)?
 
     init(viewModel: UsersListViewModel) {
