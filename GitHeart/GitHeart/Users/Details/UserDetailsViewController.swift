@@ -138,7 +138,7 @@ class UserDetailsViewController: UIViewController {
     }
 
     private func reloadData() {
-        avatarImageView.setImage(url: viewModel.avatarUrl, imageProvider: viewModel.imageProvider)
+        avatarImageView.image = viewModel.avatarImage
         nameLabel.text = viewModel.name
         loginLabel.text = viewModel.login
         bioLabel.text = viewModel.bio

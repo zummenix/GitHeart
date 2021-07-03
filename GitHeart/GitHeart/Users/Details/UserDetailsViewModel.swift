@@ -10,7 +10,8 @@ import UIKit
 class UserDetailsViewModel {
     private let user: User
     private let userDetailsProvider: UserDetailsProvider
-    let imageProvider: ImageProvider
+    private let imageProvider: ImageProvider
+    private var imageProviderTask: ImageProviderTask?
     private var userDetails: UserDetails?
 
     private(set) var isLoading: Bool = false {
@@ -23,9 +24,7 @@ class UserDetailsViewModel {
     var didLoad: (() -> Void)?
     var didFail: ((Error) -> Void)?
 
-    var avatarUrl: URL? {
-        return userDetails?.avatarUrl ?? user.avatarUrl
-    }
+    private(set) var avatarImage: UIImage?
 
     var name: String {
         return userDetails?.name ?? ""
@@ -68,6 +67,13 @@ class UserDetailsViewModel {
                 self?.didLoad?()
             case let .failure(error):
                 self?.didFail?(error)
+            }
+        }
+        if let avatarUrl = user.avatarUrl {
+            imageProviderTask?.cancel()
+            imageProviderTask = imageProvider.imageBy(url: avatarUrl) { [weak self] image in
+                self?.avatarImage = image
+                self?.didLoad?()
             }
         }
     }
