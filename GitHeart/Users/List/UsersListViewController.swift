@@ -19,7 +19,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: 60.0))
-        searchBar.placeholder = "Search by name or nickname"
+        searchBar.placeholder = "Name, Nickname or GitHub search query"
         searchBar.searchBarStyle = .minimal
         searchBar.delegate = self
         searchBar.autocapitalizationType = .none
