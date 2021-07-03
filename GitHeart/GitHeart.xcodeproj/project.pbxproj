@@ -29,6 +29,7 @@
 		4D4000F4268CC4A300FCC612 /* LineActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4000F3268CC4A300FCC612 /* LineActivityIndicatorView.swift */; };
 		4D4B1905269041FF0070E353 /* UsersListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4B1904269041FF0070E353 /* UsersListProvider.swift */; };
 		4D4B190B269042FA0070E353 /* UserDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4B190A269042FA0070E353 /* UserDetailsProvider.swift */; };
+		4D4B191426905B360070E353 /* MemoryCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4B191326905B360070E353 /* MemoryCacheTests.swift */; };
 		4D6FEBC0268E0E6A00DA3757 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */; };
 		4D79B32E268896AE008C1319 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B32D268896AE008C1319 /* UserDetails.swift */; };
 		4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */; };
@@ -71,6 +72,7 @@
 		4D4000F3268CC4A300FCC612 /* LineActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineActivityIndicatorView.swift; sourceTree = "<group>"; };
 		4D4B1904269041FF0070E353 /* UsersListProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersListProvider.swift; sourceTree = "<group>"; };
 		4D4B190A269042FA0070E353 /* UserDetailsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsProvider.swift; sourceTree = "<group>"; };
+		4D4B191326905B360070E353 /* MemoryCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCacheTests.swift; sourceTree = "<group>"; };
 		4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
 		4D79B32D268896AE008C1319 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Ex.swift"; sourceTree = "<group>"; };
@@ -146,7 +148,7 @@
 				4D238F7D26837ED100DC6397 /* Router.swift */,
 				4D0A9ED5268705A4006D0F5A /* Colors.swift */,
 				4D4B1901269041AC0070E353 /* API */,
-				4D1149C9268B63A200560AA6 /* MemoryCache.swift */,
+				4D4B191026905ADF0070E353 /* MemoryCache */,
 				4D6FEBBC268E0E4700DA3757 /* ImageService */,
 				4D79B3312688A7B4008C1319 /* Extensions */,
 				4D1149C4268B61A700560AA6 /* Views */,
@@ -176,6 +178,15 @@
 				4D1149C0268A002B00560AA6 /* API.swift */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		4D4B191026905ADF0070E353 /* MemoryCache */ = {
+			isa = PBXGroup;
+			children = (
+				4D1149C9268B63A200560AA6 /* MemoryCache.swift */,
+				4D4B191326905B360070E353 /* MemoryCacheTests.swift */,
+			);
+			path = MemoryCache;
 			sourceTree = "<group>";
 		};
 		4D6FEBBC268E0E4700DA3757 /* ImageService */ = {
@@ -270,6 +281,7 @@
 					};
 					4D238F1F26837B9400DC6397 = {
 						CreatedOnToolsVersion = 12.4;
+						LastSwiftMigration = 1240;
 						TestTargetID = 4D238F0926837B9300DC6397;
 					};
 				};
@@ -368,6 +380,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D4B191426905B360070E353 /* MemoryCacheTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +565,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K3WH7KQY37;
 				INFOPLIST_FILE = GitHeartTests/Info.plist;
@@ -563,6 +577,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zummenix.GitHeartTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GitHeart.app/GitHeart";
@@ -574,6 +589,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K3WH7KQY37;
 				INFOPLIST_FILE = GitHeartTests/Info.plist;
