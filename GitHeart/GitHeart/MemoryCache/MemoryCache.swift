@@ -15,16 +15,24 @@ protocol ByteSizable {
 
 /// A structure to cache values by a key, stores data in memory.
 ///
-/// In case if the new value exceeds the `maxByteSize` the cache will start to remove old values to fit
+/// In a case if the new value exceeds the `maxByteSize` the cache will start to remove old values to fit
 /// the new one.
+///
+/// The class is thread safe.
 ///
 /// Time complexity to get the value is O(n). Time complexity to set the value in a worst case is O(n),
 /// in a best case is O(1).
-class MemoryCache<Key: Hashable, Value: ByteSizable> {
+final class MemoryCache<Key: Hashable, Value: ByteSizable> {
+    private let serialQueue = DispatchQueue(label: "MemoryCache: \(UUID().uuidString)")
     private var list: [(Key, Value)] = []
-    private(set) var totalSize: Int = 0
+    private var _totalSize: Int = 0
 
-    /// Maximum size of the cache.
+    /// The total size of the cache in bytes.
+    var totalSize: Int {
+        return serialQueue.sync { _totalSize }
+    }
+
+    /// Maximum size of the cache in bytes.
     let maxByteSize: Int
 
     init(maxByteSize: Int) {
@@ -33,36 +41,41 @@ class MemoryCache<Key: Hashable, Value: ByteSizable> {
 
     /// Returns value for the key or nil if doesn't exist.
     func value(forKey key: Key) -> Value? {
-        return index(forKey: key).map { list[$0].1 }
+        return serialQueue.sync { index(forKey: key).map { list[$0].1 } }
     }
 
     /// Sets or resets value for the key.
     func set(value: Value?, for key: Key) {
-        if let value = value {
-            if totalSize + value.byteSize > maxByteSize {
-                repeat {
-                    if list.isEmpty {
-                        return
-                    }
-                    let item = list.removeFirst()
-                    totalSize -= item.1.byteSize
-                } while totalSize + value.byteSize > maxByteSize
-            }
-            totalSize += value.byteSize
-            list.append((key, value))
-        } else {
-            if let index = index(forKey: key) {
-                // Evict the value.
-                totalSize -= list[index].1.byteSize
-                list.remove(at: index)
+        serialQueue.async {
+            if let value = value {
+                if self._totalSize + value.byteSize > self.maxByteSize {
+                    // Remove old values until the new value fits in the cache.
+                    repeat {
+                        if self.list.isEmpty {
+                            return
+                        }
+                        let item = self.list.removeFirst()
+                        self._totalSize -= item.1.byteSize
+                    } while self._totalSize + value.byteSize > self.maxByteSize
+                }
+                self._totalSize += value.byteSize
+                self.list.append((key, value))
+            } else {
+                if let index = self.index(forKey: key) {
+                    // Evict the value.
+                    self._totalSize -= self.list[index].1.byteSize
+                    self.list.remove(at: index)
+                }
             }
         }
     }
 
     /// Clears the cache.
     func clear() {
-        list.removeAll(keepingCapacity: false)
-        totalSize = 0
+        serialQueue.async {
+            self.list.removeAll(keepingCapacity: false)
+            self._totalSize = 0
+        }
     }
 
     private func index(forKey key: Key) -> Int? {
