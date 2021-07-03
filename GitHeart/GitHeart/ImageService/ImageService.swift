@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Responsible for requesting and providing an image by its url.
 class ImageService {
     private let session: URLSession
     private let cache: MemoryCache<URL, Data>
