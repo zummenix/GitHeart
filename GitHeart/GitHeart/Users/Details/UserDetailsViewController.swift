@@ -10,6 +10,11 @@ import UIKit
 class UserDetailsViewController: UIViewController {
     private let viewModel: UserDetailsViewModel
 
+    private lazy var shareBarButtonItem: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(share(_:)))
+        return button
+    }()
+
     private let avatarImageView: WebImageView = {
         let imageView = WebImageView(frame: .zero)
         imageView.contentMode = .scaleAspectFill
@@ -63,6 +68,8 @@ class UserDetailsViewController: UIViewController {
         return label
     }()
 
+    var didTapShareUserUrl: ((URL) -> Void)?
+
     init(viewModel: UserDetailsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -77,6 +84,8 @@ class UserDetailsViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = Colors.background
+
+        navigationItem.rightBarButtonItem = shareBarButtonItem
 
         view.addSubview(avatarImageView)
         view.addSubview(nameLabel)
@@ -146,6 +155,7 @@ class UserDetailsViewController: UIViewController {
     }
 
     private func setActivityIndicator(visible: Bool) {
+        shareBarButtonItem.isEnabled = !visible
         activityIndicatorView.isHidden = !visible
         nameLabel.isHidden = visible
         if visible {
@@ -156,5 +166,10 @@ class UserDetailsViewController: UIViewController {
         } else {
             activityIndicatorView.stopAnimating()
         }
+    }
+
+    @objc private func share(_: UIBarButtonItem) {
+        guard let url = viewModel.userUrl else { return }
+        didTapShareUserUrl?(url)
     }
 }

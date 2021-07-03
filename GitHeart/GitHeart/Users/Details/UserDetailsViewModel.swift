@@ -38,6 +38,10 @@ class UserDetailsViewModel {
         return userDetails?.bio ?? ""
     }
 
+    var userUrl: URL? {
+        return userDetails?.htmlUrl
+    }
+
     var followersFollowingRepos: NSAttributedString {
         let string = NSMutableAttributedString()
         if let userDetails = userDetails {

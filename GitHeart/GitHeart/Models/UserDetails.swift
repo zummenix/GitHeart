@@ -11,6 +11,7 @@ struct UserDetails: Decodable {
     let name: String
     let login: String
     let avatarUrl: URL?
+    let htmlUrl: URL
     let bio: String?
     let company: String?
     let blog: String?

@@ -29,6 +29,12 @@ class Router {
     private func showUserDetails(_ user: User) {
         let viewModel = UserDetailsViewModel(user: user, userDetailsProvider: api, imageProvider: imageProvider)
         let controller = UserDetailsViewController(viewModel: viewModel)
+        controller.didTapShareUserUrl = { [weak self] url in self?.showActivityFor(url: url) }
         window.rootViewController?.show(controller, sender: nil)
+    }
+
+    private func showActivityFor(url: URL) {
+        let ac = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        window.rootViewController?.present(ac, animated: true, completion: nil)
     }
 }
