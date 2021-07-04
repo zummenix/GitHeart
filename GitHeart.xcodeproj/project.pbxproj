@@ -34,6 +34,7 @@
 		4D6FEBC0268E0E6A00DA3757 /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */; };
 		4D736FD0269197BF00A5260A /* UserDetailsContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D736FCF269197BF00A5260A /* UserDetailsContentView.swift */; };
 		4D736FD42691998E00A5260A /* UserDetailsContentViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D736FD32691998E00A5260A /* UserDetailsContentViewData.swift */; };
+		4D736FE42691BFF600A5260A /* NavigationLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D736FE32691BFF600A5260A /* NavigationLogoView.swift */; };
 		4D79B32E268896AE008C1319 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B32D268896AE008C1319 /* UserDetails.swift */; };
 		4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */; };
 /* End PBXBuildFile section */
@@ -80,6 +81,7 @@
 		4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
 		4D736FCF269197BF00A5260A /* UserDetailsContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsContentView.swift; sourceTree = "<group>"; };
 		4D736FD32691998E00A5260A /* UserDetailsContentViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsContentViewData.swift; sourceTree = "<group>"; };
+		4D736FE32691BFF600A5260A /* NavigationLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLogoView.swift; sourceTree = "<group>"; };
 		4D79B32D268896AE008C1319 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Ex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,6 +127,7 @@
 			children = (
 				4D1149C5268B61DA00560AA6 /* WebImageView.swift */,
 				4D4000F3268CC4A300FCC612 /* LineActivityIndicatorView.swift */,
+				4D736FE32691BFF600A5260A /* NavigationLogoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				4D0A9EDA268706C6006D0F5A /* UsersListViewModel.swift in Sources */,
 				4D0A9ED6268705A4006D0F5A /* Colors.swift in Sources */,
 				4D1149C6268B61DA00560AA6 /* WebImageView.swift in Sources */,
+				4D736FE42691BFF600A5260A /* NavigationLogoView.swift in Sources */,
 				4D1149CE268B6A4400560AA6 /* Data+Ex.swift in Sources */,
 				4D238F0E26837B9300DC6397 /* AppDelegate.swift in Sources */,
 				4D0A9EE4268853AC006D0F5A /* UserCell.swift in Sources */,
