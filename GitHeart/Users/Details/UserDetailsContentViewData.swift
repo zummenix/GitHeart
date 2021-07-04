@@ -1,5 +1,5 @@
 //
-//  UserDetailsContentData.swift
+//  UserDetailsContentViewData.swift
 //  GitHeart
 //
 //  Created by Aleksey Kuznetsov on 04.07.2021.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-/// A data to show on the user's details content view.
-struct UserDetailsContentData {
+/// A view data to show on the user's details content view.
+struct UserDetailsContentViewData {
     struct Stats {
         let followers: Int
         let following: Int

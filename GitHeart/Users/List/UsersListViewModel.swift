@@ -10,7 +10,6 @@ import Foundation
 /// A view model for the users' list.
 class UsersListViewModel {
     private let usersListProvider: UsersListProvider
-    private let imageProvider: ImageProvider
     private var users: [User] = []
     private var searchText: String = ""
     private var page: Int = 1 // The number of a page that will be requested next.
@@ -24,6 +23,9 @@ class UsersListViewModel {
             didChangeLoading?(isLoading)
         }
     }
+
+    /// The image provider to request users' avatarts.
+    let imageProvider: ImageProvider
 
     /// The status text related to loading and empty state.
     var statusText: String? {
@@ -94,10 +96,10 @@ class UsersListViewModel {
         return users.count
     }
 
-    /// Returns a view model of a user to show in a cell.
-    func userViewModel(at index: Int) -> UserViewModel {
+    /// Returns a view data of a user to show in a cell.
+    func userViewData(at index: Int) -> UserViewData {
         let user = self.user(at: index)
-        return UserViewModel(login: user.login, avatarUrl: user.avatarUrl, imageProvider: imageProvider)
+        return UserViewData(login: user.login, avatarUrl: user.avatarUrl)
     }
 
     /// Returns model of a user.

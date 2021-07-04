@@ -111,7 +111,7 @@ class UserDetailsContentView: UIView {
     }
 
     /// Configures the view with content data.
-    func configure(data: UserDetailsContentData) {
+    func configure(_ data: UserDetailsContentViewData) {
         avatarImageView.image = data.avatarImage
         nameLabel.text = data.name
         loginLabel.text = data.login

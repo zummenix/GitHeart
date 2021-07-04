@@ -67,9 +67,9 @@ class UserCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0.0, left: loginLabel.frame.origin.x, bottom: 0.0, right: 0.0)
     }
 
-    /// Configures the cell with a view model of a user.
-    func configure(_ viewModel: UserViewModel) {
-        loginLabel.text = viewModel.login
-        avatarImageView.setImage(url: viewModel.avatarUrl, imageProvider: viewModel.imageProvider)
+    /// Configures the cell with a data of a user.
+    func configure(_ data: UserViewData, imageProvider: ImageProvider) {
+        loginLabel.text = data.login
+        avatarImageView.setImage(url: data.avatarUrl, imageProvider: imageProvider)
     }
 }

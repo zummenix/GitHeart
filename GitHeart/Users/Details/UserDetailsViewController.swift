@@ -87,7 +87,7 @@ class UserDetailsViewController: UIViewController {
 
     private func reloadData() {
         shareBarButtonItem.isEnabled = viewModel.userUrl != nil
-        contentView.configure(data: viewModel.contentViewData())
+        contentView.configure(viewModel.contentViewData())
     }
 
     @objc private func share(_: UIBarButtonItem) {

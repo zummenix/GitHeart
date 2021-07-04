@@ -68,13 +68,13 @@ class UserDetailsViewModel {
     }
 
     /// Returns content view data to show on screen.
-    func contentViewData() -> UserDetailsContentData {
-        var stats: UserDetailsContentData.Stats?
+    func contentViewData() -> UserDetailsContentViewData {
+        var stats: UserDetailsContentViewData.Stats?
         if let userDetails = userDetails {
-            stats = UserDetailsContentData.Stats(followers: userDetails.followers, following: userDetails.following,
-                                                 publicRepos: userDetails.publicRepos)
+            stats = UserDetailsContentViewData.Stats(followers: userDetails.followers, following: userDetails.following,
+                                                     publicRepos: userDetails.publicRepos)
         }
-        return UserDetailsContentData(avatarImage: avatarImage, login: user.login, name: userDetails?.name ?? "",
-                                      stats: stats, bio: userDetails?.bio ?? "")
+        return UserDetailsContentViewData(avatarImage: avatarImage, login: user.login, name: userDetails?.name ?? "",
+                                          stats: stats, bio: userDetails?.bio ?? "")
     }
 }
