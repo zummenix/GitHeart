@@ -29,6 +29,11 @@ class API {
     private let baseURL: URL
     private let env: Env
     private let session: URLSession
+    private let jsonDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return decoder
+    }()
 
     init(baseURL: URL = URL(string: "https://api.github.com")!, env: Env = Env(), session: URLSession = URLSession.shared) {
         self.baseURL = baseURL
@@ -54,8 +59,8 @@ class API {
     /// Performs the GET request and decodes the result.
     ///
     /// The completion block will be called on a queue of the provided `URLSession`.
-    private func get<T: Decodable>(request: URLRequest, decoder: JSONDecoder = defaultJSONDecoder(), completion: @escaping ((Result<T, Error>) -> Void)) {
-        let task = session.dataTask(with: request) { data, response, error in
+    private func get<T: Decodable>(request: URLRequest, completion: @escaping ((Result<T, Error>) -> Void)) {
+        let task = session.dataTask(with: request) { [jsonDecoder] data, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -72,7 +77,7 @@ class API {
 
             if let data = data {
                 do {
-                    let result = try decoder.decode(T.self, from: data)
+                    let result = try jsonDecoder.decode(T.self, from: data)
                     completion(.success(result))
                 } catch {
                     completion(.failure(error))
@@ -104,10 +109,4 @@ extension API: UserDetailsProvider {
             }
         }
     }
-}
-
-private func defaultJSONDecoder() -> JSONDecoder {
-    let decoder = JSONDecoder()
-    decoder.keyDecodingStrategy = .convertFromSnakeCase
-    return decoder
 }
