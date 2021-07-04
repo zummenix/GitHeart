@@ -5,6 +5,7 @@
 //  Created by Aleksey Kuznetsov on 29.06.2021.
 //
 
+import OSLog
 import UIKit
 
 /// Responsible for requesting and providing an image by its url.
@@ -30,7 +31,7 @@ extension ImageService: ImageProvider {
                         return
                     }
                     DispatchQueue.main.async {
-                        print("ImageService: failed to download image: \(url)\nError: \(error)")
+                        os_log(.error, "ImageService: failed to download image at %@. Error: %@", url.absoluteString, error.localizedDescription)
                         completion(nil)
                     }
 
@@ -43,7 +44,7 @@ extension ImageService: ImageProvider {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        print("ImageService: failed to decode image")
+                        os_log(.error, "ImageService: failed to decode image")
                         completion(nil)
                     }
                 }
