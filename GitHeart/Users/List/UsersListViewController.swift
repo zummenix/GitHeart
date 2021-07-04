@@ -160,7 +160,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.identifier, for: indexPath) as! UserCell
-        cell.configure(viewModel.userViewModel(at: indexPath.row))
+        cell.configure(viewModel.userViewData(at: indexPath.row), imageProvider: viewModel.imageProvider)
         return cell
     }
 

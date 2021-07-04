@@ -9,7 +9,7 @@ The heart of GitHub is git and its users :)
 
 Shows the list of GitHub users and allows filtering them by Name, Nickname or GitHub search query.
 
-## Feautres
+## Features
 
 - Search and filter
 - Share user's GitHub page

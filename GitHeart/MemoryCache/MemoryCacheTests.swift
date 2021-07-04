@@ -53,4 +53,12 @@ class MemoryCacheTests: XCTestCase {
         XCTAssertNil(c.value(forKey: "aaa"))
         XCTAssertEqual(c.totalSize, 0)
     }
+
+    func testRemovesOldValueForTheSameKey() {
+        let c = cache(size: 2)
+        c.set(value: "a", for: "a")
+        c.set(value: "b", for: "a")
+        XCTAssertEqual(c.value(forKey: "a"), "b")
+        XCTAssertEqual(c.totalSize, 1)
+    }
 }

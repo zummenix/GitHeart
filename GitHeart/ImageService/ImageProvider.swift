@@ -17,6 +17,6 @@ protocol ImageProvider {
 
 /// A type that represents a task of a request to `ImageProvider`
 protocol ImageProviderTask {
-    /// Cancells the task.
+    /// Cancels the task.
     func cancel()
 }

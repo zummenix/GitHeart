@@ -13,10 +13,10 @@ class Router {
     let imageProvider: ImageProvider
     let api: API
 
-    init(window: UIWindow, imageProvider: ImageProvider) {
+    init(window: UIWindow, imageProvider: ImageProvider, api: API = API()) {
         self.window = window
         self.imageProvider = imageProvider
-        api = API()
+        self.api = api
         window.tintColor = Colors.tintColor
     }
 

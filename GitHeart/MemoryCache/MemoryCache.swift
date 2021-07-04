@@ -18,13 +18,15 @@ protocol ByteSizable {
 /// In a case if the new value exceeds the `maxByteSize` the cache will start to remove old values to fit
 /// the new one.
 ///
+/// This structure is not true LRUCache, for example, it doesn't update the position of a value that was accessed recently.
+///
 /// The class is thread safe.
 ///
 /// Time complexity to get the value is O(n). Time complexity to set the value in a worst case is O(n),
 /// in a best case is O(1).
 final class MemoryCache<Key: Hashable, Value: ByteSizable> {
     private let serialQueue = DispatchQueue(label: "MemoryCache: \(UUID().uuidString)")
-    private var list: [(Key, Value)] = []
+    private var list: [(Key, Value)] = [] // Last added values are new.
     private var _totalSize: Int = 0
 
     /// The total size of the cache in bytes.
@@ -48,7 +50,8 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
     func set(value: Value?, for key: Key) {
         serialQueue.async {
             if let value = value {
-                if self._totalSize + value.byteSize > self.maxByteSize {
+                self.evictValueIfExists(forKey: key)
+                if self.doesExceedMaxByteSize(for: value.byteSize) {
                     // Remove old values until the new value fits in the cache.
                     repeat {
                         if self.list.isEmpty {
@@ -56,16 +59,12 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
                         }
                         let item = self.list.removeFirst()
                         self._totalSize -= item.1.byteSize
-                    } while self._totalSize + value.byteSize > self.maxByteSize
+                    } while self.doesExceedMaxByteSize(for: value.byteSize)
                 }
                 self._totalSize += value.byteSize
                 self.list.append((key, value))
             } else {
-                if let index = self.index(forKey: key) {
-                    // Evict the value.
-                    self._totalSize -= self.list[index].1.byteSize
-                    self.list.remove(at: index)
-                }
+                self.evictValueIfExists(forKey: key)
             }
         }
     }
@@ -78,7 +77,18 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
         }
     }
 
+    private func evictValueIfExists(forKey key: Key) {
+        if let index = self.index(forKey: key) {
+            _totalSize -= list[index].1.byteSize
+            list.remove(at: index)
+        }
+    }
+
+    private func doesExceedMaxByteSize(for addedByteSize: Int) -> Bool {
+        return _totalSize + addedByteSize > maxByteSize
+    }
+
     private func index(forKey key: Key) -> Int? {
-        return list.lazy.enumerated().reversed().first(where: { $0.1.0 == key })?.offset
+        return list.lastIndex(where: { $0.0 == key })
     }
 }
