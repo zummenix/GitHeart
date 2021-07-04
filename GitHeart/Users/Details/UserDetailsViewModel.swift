@@ -17,6 +17,8 @@ class UserDetailsViewModel {
     private var imageProviderTask: ImageProviderTask?
     private var userDetails: UserDetails?
 
+    private var avatarImage: UIImage?
+
     /// Shows whether the loading is in progress.
     private(set) var isLoading: Bool = false {
         didSet {
@@ -24,8 +26,6 @@ class UserDetailsViewModel {
         }
     }
 
-  // Might want to use a struct with mutable parameters here.
-  // That way no one would forget to define them all when you'll change it
     /// Called when the loading status changes.
     var didChangeLoading: ((Bool) -> Void)?
     /// Called when loading is done.
@@ -33,43 +33,9 @@ class UserDetailsViewModel {
     /// Called when an error has occurred.
     var didFail: ((Error) -> Void)?
 
-    /// The avatar of a user.
-    private(set) var avatarImage: UIImage?
-
-  // All these parameters could be just a displayable `UserDetailsViewData` object
-  // that is created with `UserDetails` model.
-  // That would help with creating UserDetailsViewController snapshot test with any configuration without dependencies.
-    /// The name of a user.
-    var name: String {
-        return userDetails?.name ?? ""
-    }
-
-    /// The login of a user.
-    var login: String {
-        return user.login
-    }
-
-    /// The bio of a user.
-    var bio: String {
-        return userDetails?.bio ?? ""
-    }
-
     /// The url of a user's page on GitHub.
     var userUrl: URL? {
         return userDetails?.htmlUrl
-    }
-
-    /// The formatted string with user's followers, following and repositories counts.
-    var followersFollowingRepos: NSAttributedString {
-        let string = NSMutableAttributedString()
-        if let userDetails = userDetails {
-            string.append(compoundString(left: String(userDetails.followers), right: "followers"))
-            string.append(separatorString())
-            string.append(compoundString(left: String(userDetails.following), right: "following"))
-            string.append(NSAttributedString(string: "\n"))
-            string.append(compoundString(left: String(userDetails.publicRepos), right: "repositories"))
-        }
-        return string.centered
     }
 
     init(user: User, userDetailsProvider: UserDetailsProvider, imageProvider: ImageProvider) {
@@ -100,33 +66,15 @@ class UserDetailsViewModel {
             }
         }
     }
-}
 
-private func compoundString(left: String, right: String) -> NSAttributedString {
-    let string = NSMutableAttributedString()
-    string.append(NSAttributedString(string: left, attributes: [
-        NSAttributedString.Key.foregroundColor: Colors.primaryTextColor,
-        NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline),
-    ]))
-    string.append(NSAttributedString(string: " \(right)", attributes: [
-        NSAttributedString.Key.foregroundColor: Colors.secondaryTextColor,
-        NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .subheadline),
-    ]))
-    return string
-}
-
-private func separatorString() -> NSAttributedString {
-    return NSAttributedString(string: " · ", attributes: [
-        NSAttributedString.Key.foregroundColor: Colors.primaryTextColor,
-        NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline),
-    ])
-}
-
-private extension NSMutableAttributedString {
-    var centered: Self {
-        let style = NSMutableParagraphStyle()
-        style.alignment = .center
-        addAttributes([NSAttributedString.Key.paragraphStyle: style], range: NSRange(location: 0, length: length))
-        return self
+    /// Returns content view data to show on screen.
+    func contentViewData() -> UserDetailsContentData {
+        var stats: UserDetailsContentData.Stats?
+        if let userDetails = userDetails {
+            stats = UserDetailsContentData.Stats(followers: userDetails.followers, following: userDetails.following,
+                                                 publicRepos: userDetails.publicRepos)
+        }
+        return UserDetailsContentData(avatarImage: avatarImage, login: user.login, name: userDetails?.name ?? "",
+                                      stats: stats, bio: userDetails?.bio ?? "")
     }
 }
