@@ -15,9 +15,10 @@ protocol ByteSizable {
 
 /// A structure to cache values by a key, stores data in memory.
 ///
-// Does this type of cache has a common name? I heard about LRU, but not sure it it's used in here.
 /// In a case if the new value exceeds the `maxByteSize` the cache will start to remove old values to fit
 /// the new one.
+///
+/// This structure is not true LRUCache, for example, it doesn't update the position of a value that was accessed recently.
 ///
 /// The class is thread safe.
 ///
@@ -25,10 +26,7 @@ protocol ByteSizable {
 /// in a best case is O(1).
 final class MemoryCache<Key: Hashable, Value: ByteSizable> {
     private let serialQueue = DispatchQueue(label: "MemoryCache: \(UUID().uuidString)")
-  // Why it's an array, and not an ordered dictionary where key is used only once?
-  // It would be faster to retrieve a value from it.
-  // OrderedDictionary is available in https://github.com/apple/swift-collections repo
-    private var list: [(Key, Value)] = []
+    private var list: [(Key, Value)] = [] // Last added values are new.
     private var _totalSize: Int = 0
 
     /// The total size of the cache in bytes.
@@ -52,10 +50,8 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
     func set(value: Value?, for key: Key) {
         serialQueue.async {
             if let value = value {
-              // `self._totalSize + value.byteSize > self.maxByteSize` can be defined as a method inside this class
-              // That way code duplication won't be necessary and readability would improve
-              // Something like `doesExceedMaxByteSize(for addedByteSize: Int)`
-                if self._totalSize + value.byteSize > self.maxByteSize {
+                self.evictValueIfExists(forKey: key)
+                if self.doesExceedMaxByteSize(for: value.byteSize) {
                     // Remove old values until the new value fits in the cache.
                     repeat {
                         if self.list.isEmpty {
@@ -63,16 +59,12 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
                         }
                         let item = self.list.removeFirst()
                         self._totalSize -= item.1.byteSize
-                    } while self._totalSize + value.byteSize > self.maxByteSize
+                    } while self.doesExceedMaxByteSize(for: value.byteSize)
                 }
                 self._totalSize += value.byteSize
                 self.list.append((key, value))
             } else {
-                if let index = self.index(forKey: key) {
-                    // Evict the value.
-                    self._totalSize -= self.list[index].1.byteSize
-                    self.list.remove(at: index)
-                }
+                self.evictValueIfExists(forKey: key)
             }
         }
     }
@@ -85,10 +77,18 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
         }
     }
 
+    private func evictValueIfExists(forKey key: Key) {
+        if let index = self.index(forKey: key) {
+            _totalSize -= list[index].1.byteSize
+            list.remove(at: index)
+        }
+    }
+
+    private func doesExceedMaxByteSize(for addedByteSize: Int) -> Bool {
+        return _totalSize + addedByteSize > maxByteSize
+    }
+
     private func index(forKey key: Key) -> Int? {
-      // reversing an array is O(n) operation on retrieval and checks here.
-      // You might want to reverse a list when adding a new element?
-      // Or just use another data structure from apple/swift-collections.
-        return list.lazy.enumerated().reversed().first(where: { $0.1.0 == key })?.offset
+        return list.lastIndex(where: { $0.0 == key })
     }
 }

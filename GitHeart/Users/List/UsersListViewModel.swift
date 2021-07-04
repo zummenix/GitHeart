@@ -91,7 +91,6 @@ class UsersListViewModel {
 
     /// Returns number of users in the list.
     func numberOfUsers() -> Int {
-      // Return is not required on one-liners
         return users.count
     }
 

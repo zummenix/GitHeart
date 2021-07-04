@@ -64,7 +64,6 @@ class UserCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         avatarImageView.layer.cornerRadius = avatarImageView.frame.size.width / 2.0
-        // Cool, not everyone remembers to manage that with separator :)
         separatorInset = UIEdgeInsets(top: 0.0, left: loginLabel.frame.origin.x, bottom: 0.0, right: 0.0)
     }
 

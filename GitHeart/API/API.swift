@@ -89,8 +89,6 @@ extension API: UsersListProvider {
     func users(searchTerm: String, page: Int, completion: @escaping ((Result<[User], Error>) -> Void)) {
         let query = searchTerm.isEmpty ? "followers:>1000" : searchTerm
         get(request: request(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { result in
-          // Is it correct layer of abstraction to move completion into main queue?
-          // I think it should be defined on another level. Main queue is *required* only in UI layer.
             DispatchQueue.main.async {
                 completion(result.map { (paginated: PaginatedUsers) in paginated.items })
             }

@@ -20,7 +20,6 @@ class ImageService {
 
 extension ImageService: ImageProvider {
     func imageBy(url: URL, completion: @escaping (UIImage?) -> Void) -> ImageProviderTask? {
-      // Creating an UIImage object from data consumes some time, if I'm right.
         if let data = cache.value(forKey: url), let image = UIImage(data: data) {
             completion(image)
             return nil
