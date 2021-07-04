@@ -11,9 +11,7 @@ import Foundation
 class UsersListViewModel {
     private let usersListProvider: UsersListProvider
     private var users: [User] = []
-    private var searchText: String = ""
     private var page: Int = 1 // The number of a page that will be requested next.
-
     private var isLastPage: Bool = false
     private var searchWorkItem: DispatchWorkItem?
 
@@ -23,6 +21,9 @@ class UsersListViewModel {
             didChangeLoading?(isLoading)
         }
     }
+
+    /// Current search text.
+    private(set) var searchText: String = ""
 
     /// The image provider to request users' avatars.
     let imageProvider: ImageProvider
@@ -75,6 +76,7 @@ class UsersListViewModel {
     ///
     /// The method throttles to mitigate rate limiting issues and improve performance.
     func applySearch(text: String) {
+        guard searchText != text else { return }
         searchText = text
         page = 1
         isLastPage = false

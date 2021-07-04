@@ -66,6 +66,10 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         super.init(nibName: nil, bundle: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @available(*, unavailable)
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -96,6 +100,11 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         viewModel.didFail = { [weak self] error in self?.show(error: error) }
 
         viewModel.load()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShowNotification(_:)),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHideNotification(_:)),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -147,9 +156,26 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
         statusLabelCenterYConstraint?.constant = (tableView.contentOffset.y + view.safeAreaInsets.top) * -1.0
     }
 
+    private func isTableViewUnderNavigationBar() -> Bool {
+        return tableView.contentOffset.y + view.safeAreaInsets.top > 0.0
+    }
+
     private func updateNavigationBarTransparency() {
-        let y = tableView.contentOffset.y + view.safeAreaInsets.top
-        navigationController?.navigationBar.setNavigationBarTransparent(y <= 0.0)
+        navigationController?.navigationBar.setNavigationBarTransparent(!isTableViewUnderNavigationBar())
+    }
+
+    private func adjustTableViewBottomInset(_ value: CGFloat) {
+        tableView.contentInset.bottom = value
+        tableView.scrollIndicatorInsets.bottom = value
+    }
+
+    @objc private func keyboardWillShowNotification(_ notification: Notification) {
+        let endFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? CGRect.zero
+        adjustTableViewBottomInset(endFrame.size.height - view.safeAreaInsets.bottom)
+    }
+
+    @objc private func keyboardWillHideNotification(_: Notification) {
+        adjustTableViewBottomInset(0.0)
     }
 
     // MARK: - UITableViewDelegate, UITableViewDataSource
@@ -166,7 +192,9 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        view.endEditing(true) // End editing in search bar.
+        if isTableViewUnderNavigationBar() {
+            view.endEditing(true) // End editing to avoid autoscroll to the top when user gets back.
+        }
         didTapUser?(viewModel.user(at: indexPath.row))
     }
 
@@ -181,6 +209,14 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     // MARK: - UISearchBarDelegate
 
+    func searchBarTextDidBeginEditing(_: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+
+    func searchBarTextDidEndEditing(_: UISearchBar) {
+        searchBar.setShowsCancelButton(!viewModel.searchText.isEmpty, animated: true)
+    }
+
     func searchBar(_: UISearchBar, textDidChange searchText: String) {
         viewModel.applySearch(text: searchText)
     }
@@ -188,6 +224,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         viewModel.applySearch(text: "")
+        view.endEditing(true)
     }
 
     func searchBarSearchButtonClicked(_: UISearchBar) {
