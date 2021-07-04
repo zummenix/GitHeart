@@ -6,8 +6,6 @@
 //
 
 import UIKit
-// ViewModel knows about UI with UIImage and NSAttributedString.
-// Not cool, that's why I would prefer a parent-child view controller relation
 
 /// A view model for the user details.
 class UserDetailsViewModel {

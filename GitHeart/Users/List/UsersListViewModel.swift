@@ -24,7 +24,7 @@ class UsersListViewModel {
         }
     }
 
-    /// The image provider to request users' avatarts.
+    /// The image provider to request users' avatars.
     let imageProvider: ImageProvider
 
     /// The status text related to loading and empty state.
