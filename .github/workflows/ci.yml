@@ -1,0 +1,37 @@
+name: iOS starter workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build and Test default scheme using any available iPhone simulator
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate Env.swift
+        env:
+          content: 'struct Env { let githubAccessToken = "" }'
+        run: |
+          echo "$content" > "GitHeart/Env.swift"
+      - name: Build
+        env:
+          scheme: "GitHeart"
+          platform: ${{ 'iOS Simulator' }}
+        run: |
+          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
+          device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}'`
+          xcodebuild build-for-testing -scheme "$scheme" -project "GitHeart.xcodeproj" -destination "platform=$platform,name=$device"
+      - name: Test
+        env:
+          scheme: "GitHeart"
+          platform: ${{ 'iOS Simulator' }}
+        run: |
+          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
+          device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}'`
+          xcodebuild test-without-building -scheme "$scheme" -project "GitHeart.xcodeproj" -destination "platform=$platform,name=$device"
