@@ -10,6 +10,10 @@ import UIKit
 /// Responsible for presenting and managing view controllers.
 class Router {
     let window: UIWindow
+    // Dependencies are provided inside a "presenting manager".
+    // You might want to use some kind of service factory or a dependencies provider.
+    // Just a note about object `responsibilities`
+    // Why image provider is coming with init, but api is created here?
     let imageProvider: ImageProvider
     let api: API
 
@@ -17,6 +21,7 @@ class Router {
         self.window = window
         self.imageProvider = imageProvider
         api = API()
+        // Might want to use Appearance for this, but it's okay now too.
         window.tintColor = Colors.tintColor
     }
 

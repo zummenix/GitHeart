@@ -7,6 +7,12 @@
 
 import UIKit
 
+// I would prefer to divide VIEW layer from loading layer.
+// It might be a child-parent view controller relation.
+// Child would configure all view-related things, like auto layout and labels
+// Parent would still be able to start loading and present uialertcontroller.
+// That way you might not even need a view model layer :)
+// But that's my vision now, because I don't like view models for being just a proxy sometimes.
 /// A view controller for the user's details.
 class UserDetailsViewController: UIViewController {
     private let viewModel: UserDetailsViewModel
@@ -148,6 +154,12 @@ class UserDetailsViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
+  // The control flow how reloadData is called is not obvious now.
+  // It's a subscription that looks on parameters inside a view model
+  // 1. I would prefer reloadData method to have a parameter `UserDetailsViewData`
+  // 2. It would be better to have a presenter-view relation just here, when parent controller
+  //    would update data by calling this public `reloadData` method.
+  // That is called data-driven view controller design
     private func reloadData() {
         avatarImageView.image = viewModel.avatarImage
         nameLabel.text = viewModel.name

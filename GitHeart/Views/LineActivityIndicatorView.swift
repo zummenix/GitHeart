@@ -8,6 +8,7 @@
 import CoreGraphics
 import UIKit
 
+// Cool!
 /// An activity indicator view as a line to indicate processing.
 ///
 /// The animation duration adapts automatically by calculating the duration of previous processing task.

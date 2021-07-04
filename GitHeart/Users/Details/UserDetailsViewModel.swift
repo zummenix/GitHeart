@@ -6,6 +6,8 @@
 //
 
 import UIKit
+// ViewModel knows about UI with UIImage and NSAttributedString.
+// Not cool, that's why I would prefer a parent-child view controller relation
 
 /// A view model for the user details.
 class UserDetailsViewModel {
@@ -22,6 +24,8 @@ class UserDetailsViewModel {
         }
     }
 
+  // Might want to use a struct with mutable parameters here.
+  // That way no one would forget to define them all when you'll change it
     /// Called when the loading status changes.
     var didChangeLoading: ((Bool) -> Void)?
     /// Called when loading is done.
@@ -32,6 +36,9 @@ class UserDetailsViewModel {
     /// The avatar of a user.
     private(set) var avatarImage: UIImage?
 
+  // All these parameters could be just a displayable `UserDetailsViewData` object
+  // that is created with `UserDetails` model.
+  // That would help with creating UserDetailsViewController snapshot test with any configuration without dependencies.
     /// The name of a user.
     var name: String {
         return userDetails?.name ?? ""

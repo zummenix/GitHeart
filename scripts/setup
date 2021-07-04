@@ -4,6 +4,7 @@ ENV_FILE="GitHeart/Env.swift"
 
 function generateEnvFile {
     echo "To avoid agressive rate limiting from GitHub API the project needs your Personal Access Token."
+    # It would be nice to say which scopes are required
     echo "Please follow instructions at https://bit.ly/3dGTdrH to create it."
     read -p "Personal Access Token: " ACCESS_TOKEN
     cat > "$ENV_FILE" <<- EOM
