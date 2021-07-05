@@ -7,7 +7,7 @@ The heart of GitHub is git and its users :)
 
 ![Screenshots](./screenshots.png)
 
-Shows the list of GitHub users and allows filtering them by Name, Nickname or GitHub search query.
+Shows the list of GitHub users and their details. Filter by Name, Nickname or GitHub search query.
 
 ## Features
 
