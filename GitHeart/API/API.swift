@@ -92,7 +92,7 @@ class API {
 
 extension API: UsersListProvider {
     func users(searchTerm: String, page: Int, completion: @escaping ((Result<[User], Error>) -> Void)) {
-        let query = searchTerm.isEmpty ? "followers:>1000" : searchTerm
+        let query = searchTerm.isEmpty ? "sort:followers" : searchTerm
         get(request: request(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { result in
             DispatchQueue.main.async {
                 completion(result.map { (paginated: PaginatedUsers) in paginated.items })
