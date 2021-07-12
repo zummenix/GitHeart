@@ -37,6 +37,9 @@
 		4D736FE42691BFF600A5260A /* NavigationLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D736FE32691BFF600A5260A /* NavigationLogoView.swift */; };
 		4D79B32E268896AE008C1319 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B32D268896AE008C1319 /* UserDetails.swift */; };
 		4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */; };
+		4DC7B207269CA56500FE84A1 /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B206269CA56500FE84A1 /* Debouncer.swift */; };
+		4DC7B20B269CA62B00FE84A1 /* DispatchQueueDebouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */; };
+		4DC7B20F269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +88,9 @@
 		4D736FE72691C1C100A5260A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4D79B32D268896AE008C1319 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Ex.swift"; sourceTree = "<group>"; };
+		4DC7B206269CA56500FE84A1 /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
+		4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueDebouncer.swift; sourceTree = "<group>"; };
+		4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueDebouncerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +164,7 @@
 				4D238F0D26837B9300DC6397 /* AppDelegate.swift */,
 				4D238F7D26837ED100DC6397 /* Router.swift */,
 				4D0A9ED5268705A4006D0F5A /* Colors.swift */,
+				4DC7B205269CA53E00FE84A1 /* Debouncer */,
 				4D4B1901269041AC0070E353 /* API */,
 				4D4B191026905ADF0070E353 /* MemoryCache */,
 				4D6FEBBC268E0E4700DA3757 /* ImageService */,
@@ -240,6 +247,16 @@
 				4D1149CD268B6A4400560AA6 /* Data+Ex.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		4DC7B205269CA53E00FE84A1 /* Debouncer */ = {
+			isa = PBXGroup;
+			children = (
+				4DC7B206269CA56500FE84A1 /* Debouncer.swift */,
+				4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */,
+				4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */,
+			);
+			path = Debouncer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -367,6 +384,7 @@
 			files = (
 				4D6FEBC0268E0E6A00DA3757 /* ImageProvider.swift in Sources */,
 				4D238F7E26837ED100DC6397 /* Router.swift in Sources */,
+				4DC7B207269CA56500FE84A1 /* Debouncer.swift in Sources */,
 				4D736FD0269197BF00A5260A /* UserDetailsContentView.swift in Sources */,
 				4D1149D4268B6B7B00560AA6 /* ImageService.swift in Sources */,
 				4D0A9EDA268706C6006D0F5A /* UsersListViewModel.swift in Sources */,
@@ -387,6 +405,7 @@
 				4D0A9EE82688583A006D0F5A /* UserViewData.swift in Sources */,
 				4D4B190B269042FA0070E353 /* UserDetailsProvider.swift in Sources */,
 				4D0A9EED268858CB006D0F5A /* User.swift in Sources */,
+				4DC7B20B269CA62B00FE84A1 /* DispatchQueueDebouncer.swift in Sources */,
 				4D4000F0268CB7E400FCC612 /* UIAlertController+Ex.swift in Sources */,
 				4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */,
 				4D4B1905269041FF0070E353 /* UsersListProvider.swift in Sources */,
@@ -399,6 +418,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D4B191426905B360070E353 /* MemoryCacheTests.swift in Sources */,
+				4DC7B20F269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

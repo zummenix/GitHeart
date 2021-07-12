@@ -10,10 +10,10 @@ import Foundation
 /// A view model for the users' list.
 class UsersListViewModel {
     private let usersListProvider: UsersListProvider
+    private let searchDebouncer: Debouncer
     private var users: [User] = []
     private var page: Int = 1 // The number of a page that will be requested next.
     private var isLastPage: Bool = false
-    private var searchWorkItem: DispatchWorkItem?
 
     /// Shows whether the loading is in progress.
     private(set) var isLoading: Bool = false {
@@ -43,9 +43,12 @@ class UsersListViewModel {
     /// Called when an error has occurred.
     var didFail: ((Error) -> Void)?
 
-    init(usersListProvider: UsersListProvider, imageProvider: ImageProvider) {
+    init(usersListProvider: UsersListProvider, imageProvider: ImageProvider,
+         searchDebouncer: Debouncer = DispatchQueueDebouncer(timeInterval: .seconds(1)))
+    {
         self.usersListProvider = usersListProvider
         self.imageProvider = imageProvider
+        self.searchDebouncer = searchDebouncer
     }
 
     /// Starts loading users from the web.
@@ -74,15 +77,14 @@ class UsersListViewModel {
 
     /// Applies search text, and starts loading.
     ///
-    /// The method throttles to mitigate rate limiting issues and improve performance.
+    /// The method debounces to mitigate rate limiting issues and improve performance.
     func applySearch(text: String) {
         guard searchText != text else { return }
         searchText = text
         page = 1
         isLastPage = false
 
-        searchWorkItem?.cancel()
-        searchWorkItem = DispatchWorkItem { [weak self] in
+        searchDebouncer.debounce { [weak self] in
             guard let self = self else { return }
             if self.isLoading {
                 self.applySearch(text: self.searchText)
@@ -90,7 +92,6 @@ class UsersListViewModel {
                 self.load()
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: searchWorkItem!)
     }
 
     /// Returns number of users in the list.
