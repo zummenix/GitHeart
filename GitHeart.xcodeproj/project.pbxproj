@@ -37,6 +37,7 @@
 		4D736FE42691BFF600A5260A /* NavigationLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D736FE32691BFF600A5260A /* NavigationLogoView.swift */; };
 		4D79B32E268896AE008C1319 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B32D268896AE008C1319 /* UserDetails.swift */; };
 		4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */; };
+		4D8389FC26A0748C00203165 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8389FB26A0748C00203165 /* Cache.swift */; };
 		4DC7B207269CA56500FE84A1 /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B206269CA56500FE84A1 /* Debouncer.swift */; };
 		4DC7B20B269CA62B00FE84A1 /* DispatchQueueDebouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */; };
 		4DC7B20F269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */; };
@@ -88,6 +89,7 @@
 		4D736FE72691C1C100A5260A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4D79B32D268896AE008C1319 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Ex.swift"; sourceTree = "<group>"; };
+		4D8389FB26A0748C00203165 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		4DC7B206269CA56500FE84A1 /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 		4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueDebouncer.swift; sourceTree = "<group>"; };
 		4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueDebouncerTests.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 		4D4B191026905ADF0070E353 /* MemoryCache */ = {
 			isa = PBXGroup;
 			children = (
+				4D8389FB26A0748C00203165 /* Cache.swift */,
 				4D1149C9268B63A200560AA6 /* MemoryCache.swift */,
 				4D4B191326905B360070E353 /* MemoryCacheTests.swift */,
 			);
@@ -410,6 +413,7 @@
 				4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */,
 				4D4B1905269041FF0070E353 /* UsersListProvider.swift in Sources */,
 				4D0A9ECA2687027B006D0F5A /* UsersListViewController.swift in Sources */,
+				4D8389FC26A0748C00203165 /* Cache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

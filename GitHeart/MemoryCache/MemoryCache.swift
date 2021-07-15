@@ -22,7 +22,10 @@ protocol ByteSizable {
 ///
 /// Time complexity to get the value is O(1).
 /// Time complexity to set the value is O(n) in a worst case, O(1) in a best case.
-final class MemoryCache<Key: Hashable, Value: ByteSizable> {
+final class MemoryCache<Key: Hashable, Value: ByteSizable>: Cache {
+    typealias Key = Key
+    typealias Value = Value
+
     private let serialQueue = DispatchQueue(label: "MemoryCache: \(UUID().uuidString)")
     private var map: [Key: Value] = [:]
     private var queue: [Key] = [] // Added keys are new.
