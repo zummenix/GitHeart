@@ -22,10 +22,7 @@ protocol ByteSizable {
 ///
 /// Time complexity to get the value is O(1).
 /// Time complexity to set the value is O(n) in a worst case, O(1) in a best case.
-final class MemoryCache<Key: Hashable, Value: ByteSizable>: Cache {
-    typealias Key = Key
-    typealias Value = Value
-
+final class MemoryCache<Key: Hashable, Value: ByteSizable> {
     private let serialQueue = DispatchQueue(label: "MemoryCache: \(UUID().uuidString)")
     private var map: [Key: Value] = [:]
     private var queue: [Key] = [] // Added keys are new.
@@ -42,6 +39,24 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable>: Cache {
     init(maxByteSize: Int) {
         self.maxByteSize = maxByteSize
     }
+
+    private func evictValueIfExists(forKey key: Key) {
+        if let value = map[key] {
+            _totalSize -= value.byteSize
+            map[key] = nil
+            let i = queue.firstIndex(where: { $0 == key })! // The key should exist in the queue.
+            queue.remove(at: i)
+        }
+    }
+
+    private func doesExceedMaxByteSize(for addedByteSize: Int) -> Bool {
+        return _totalSize + addedByteSize > maxByteSize
+    }
+}
+
+extension MemoryCache: Cache {
+    typealias Key = Key
+    typealias Value = Value
 
     /// Returns value for the key or nil if doesn't exist.
     func value(forKey key: Key) -> Value? {
@@ -81,18 +96,5 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable>: Cache {
             self.map.removeAll(keepingCapacity: false)
             self._totalSize = 0
         }
-    }
-
-    private func evictValueIfExists(forKey key: Key) {
-        if let value = map[key] {
-            _totalSize -= value.byteSize
-            map[key] = nil
-            let i = queue.firstIndex(where: { $0 == key })! // The key should exist in the queue.
-            queue.remove(at: i)
-        }
-    }
-
-    private func doesExceedMaxByteSize(for addedByteSize: Int) -> Bool {
-        return _totalSize + addedByteSize > maxByteSize
     }
 }
