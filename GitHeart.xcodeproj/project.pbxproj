@@ -168,7 +168,7 @@
 				4D0A9ED5268705A4006D0F5A /* Colors.swift */,
 				4DC7B205269CA53E00FE84A1 /* Debouncer */,
 				4D4B1901269041AC0070E353 /* API */,
-				4D4B191026905ADF0070E353 /* MemoryCache */,
+				4D4B191026905ADF0070E353 /* Cache */,
 				4D6FEBBC268E0E4700DA3757 /* ImageService */,
 				4D79B3312688A7B4008C1319 /* Extensions */,
 				4D1149C4268B61A700560AA6 /* Views */,
@@ -201,14 +201,14 @@
 			path = API;
 			sourceTree = "<group>";
 		};
-		4D4B191026905ADF0070E353 /* MemoryCache */ = {
+		4D4B191026905ADF0070E353 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
 				4D8389FB26A0748C00203165 /* Cache.swift */,
 				4D1149C9268B63A200560AA6 /* MemoryCache.swift */,
 				4D4B191326905B360070E353 /* MemoryCacheTests.swift */,
 			);
-			path = MemoryCache;
+			path = Cache;
 			sourceTree = "<group>";
 		};
 		4D6FEBBC268E0E4700DA3757 /* ImageService */ = {
