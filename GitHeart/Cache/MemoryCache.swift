@@ -26,11 +26,11 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
     private let serialQueue = DispatchQueue(label: "MemoryCache: \(UUID().uuidString)")
     private var map: [Key: Value] = [:]
     private var queue: [Key] = [] // Added keys are new.
-    private var _totalSize: Int = 0
+    private var size: Int = 0
 
     /// The total size of the cache in bytes.
     var totalSize: Int {
-        return serialQueue.sync { _totalSize }
+        return serialQueue.sync { size }
     }
 
     /// Maximum size of the cache in bytes.
@@ -42,7 +42,7 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
 
     private func evictValueIfExists(forKey key: Key) {
         if let value = map[key] {
-            _totalSize -= value.byteSize
+            size -= value.byteSize
             map[key] = nil
             let i = queue.firstIndex(where: { $0 == key })! // The key should exist in the queue.
             queue.remove(at: i)
@@ -50,7 +50,7 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
     }
 
     private func doesExceedMaxByteSize(for addedByteSize: Int) -> Bool {
-        return _totalSize + addedByteSize > maxByteSize
+        return size + addedByteSize > maxByteSize
     }
 }
 
@@ -75,10 +75,10 @@ extension MemoryCache: Cache {
                         let oldKey = self.queue.removeFirst()
                         let oldValue = self.map[oldKey]! // The value should exist in the map.
                         self.map[oldKey] = nil
-                        self._totalSize -= oldValue.byteSize
+                        self.size -= oldValue.byteSize
                     } while self.doesExceedMaxByteSize(for: value.byteSize)
                 }
-                self._totalSize += value.byteSize
+                self.size += value.byteSize
                 self.queue.append(key)
                 self.map[key] = value
             } else {
@@ -91,7 +91,7 @@ extension MemoryCache: Cache {
         serialQueue.async {
             self.queue.removeAll(keepingCapacity: false)
             self.map.removeAll(keepingCapacity: false)
-            self._totalSize = 0
+            self.size = 0
         }
     }
 
