@@ -58,12 +58,10 @@ extension MemoryCache: Cache {
     typealias Key = Key
     typealias Value = Value
 
-    /// Returns value for the key or nil if doesn't exist.
     func value(forKey key: Key) -> Value? {
         return serialQueue.sync { map[key] }
     }
 
-    /// Sets or resets value for the key.
     func set(value: Value?, for key: Key) {
         serialQueue.async {
             if let value = value {
@@ -89,7 +87,6 @@ extension MemoryCache: Cache {
         }
     }
 
-    /// Clears the cache.
     func clear() {
         serialQueue.async {
             self.queue.removeAll(keepingCapacity: false)
