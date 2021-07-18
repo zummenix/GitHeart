@@ -33,7 +33,7 @@ class MemoryCacheTests: XCTestCase {
         XCTAssertEqual(c.totalSize, 6)
         c.set(value: nil, for: "ccc")
         XCTAssertEqual(c.totalSize, 3)
-        c.clear()
+        c.removeAll()
         XCTAssertEqual(c.totalSize, 0)
     }
 
@@ -60,5 +60,13 @@ class MemoryCacheTests: XCTestCase {
         c.set(value: "b", for: "a")
         XCTAssertEqual(c.value(forKey: "a"), "b")
         XCTAssertEqual(c.totalSize, 1)
+    }
+
+    func testFreeMemoryRemovesAllData() {
+        let c = cache()
+        c.set(value: "a", for: "a")
+        c.freeMemory()
+        XCTAssertNil(c.value(forKey: "a"))
+        XCTAssertEqual(c.totalSize, 0)
     }
 }

@@ -87,11 +87,15 @@ extension MemoryCache: Cache {
         }
     }
 
-    func clear() {
+    func removeAll() {
         serialQueue.async {
             self.queue.removeAll(keepingCapacity: false)
             self.map.removeAll(keepingCapacity: false)
             self._totalSize = 0
         }
+    }
+
+    func freeMemory() {
+        removeAll()
     }
 }

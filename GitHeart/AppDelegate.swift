@@ -22,6 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidReceiveMemoryWarning(_: UIApplication) {
-        imageCache.clear()
+        imageCache.freeMemory()
     }
 }
