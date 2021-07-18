@@ -14,59 +14,59 @@ extension String: ByteSizable {
     }
 }
 
-private func cache(size: Int = 20) -> MemoryCache<String, String> {
+private func createCache(size: Int = 20) -> MemoryCache<String, String> {
     return MemoryCache(maxByteSize: size)
 }
 
 class MemoryCacheTests: XCTestCase {
     func testSetsAndGetsValue() throws {
-        let c = cache()
-        c.set(value: "a", for: "b")
-        XCTAssertEqual(c.value(forKey: "b"), "a")
+        let cache = createCache()
+        cache.set(value: "a", for: "b")
+        XCTAssertEqual(cache.value(forKey: "b"), "a")
     }
 
     func testTotalSizeChanges() {
-        let c = cache()
-        c.set(value: "a", for: "a")
-        c.set(value: "bb", for: "bb")
-        c.set(value: "ccc", for: "ccc")
-        XCTAssertEqual(c.totalSize, 6)
-        c.set(value: nil, for: "ccc")
-        XCTAssertEqual(c.totalSize, 3)
-        c.removeAll()
-        XCTAssertEqual(c.totalSize, 0)
+        let cache = createCache()
+        cache.set(value: "a", for: "a")
+        cache.set(value: "bb", for: "bb")
+        cache.set(value: "ccc", for: "ccc")
+        XCTAssertEqual(cache.totalSize, 6)
+        cache.set(value: nil, for: "ccc")
+        XCTAssertEqual(cache.totalSize, 3)
+        cache.removeAll()
+        XCTAssertEqual(cache.totalSize, 0)
     }
 
     func testEvictsOldValuesAndDoesntOverflow() {
-        let c = cache(size: 2)
-        c.set(value: "a", for: "a")
-        c.set(value: "b", for: "b")
-        c.set(value: "c", for: "c")
-        XCTAssertNil(c.value(forKey: "a"))
-        XCTAssertEqual(c.value(forKey: "c"), "c")
-        XCTAssertEqual(c.totalSize, 2)
+        let cache = createCache(size: 2)
+        cache.set(value: "a", for: "a")
+        cache.set(value: "b", for: "b")
+        cache.set(value: "c", for: "c")
+        XCTAssertNil(cache.value(forKey: "a"))
+        XCTAssertEqual(cache.value(forKey: "c"), "c")
+        XCTAssertEqual(cache.totalSize, 2)
     }
 
     func testDoesntSetBigValue() {
-        let c = cache(size: 2)
-        c.set(value: "aaa", for: "aaa")
-        XCTAssertNil(c.value(forKey: "aaa"))
-        XCTAssertEqual(c.totalSize, 0)
+        let cache = createCache(size: 2)
+        cache.set(value: "aaa", for: "aaa")
+        XCTAssertNil(cache.value(forKey: "aaa"))
+        XCTAssertEqual(cache.totalSize, 0)
     }
 
     func testRemovesOldValueForTheSameKey() {
-        let c = cache(size: 2)
-        c.set(value: "a", for: "a")
-        c.set(value: "b", for: "a")
-        XCTAssertEqual(c.value(forKey: "a"), "b")
-        XCTAssertEqual(c.totalSize, 1)
+        let cache = createCache(size: 2)
+        cache.set(value: "a", for: "a")
+        cache.set(value: "b", for: "a")
+        XCTAssertEqual(cache.value(forKey: "a"), "b")
+        XCTAssertEqual(cache.totalSize, 1)
     }
 
     func testFreeMemoryRemovesAllData() {
-        let c = cache()
-        c.set(value: "a", for: "a")
-        c.freeMemory()
-        XCTAssertNil(c.value(forKey: "a"))
-        XCTAssertEqual(c.totalSize, 0)
+        let cache = createCache()
+        cache.set(value: "a", for: "a")
+        cache.freeMemory()
+        XCTAssertNil(cache.value(forKey: "a"))
+        XCTAssertEqual(cache.totalSize, 0)
     }
 }
