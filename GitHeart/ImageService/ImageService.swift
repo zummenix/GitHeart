@@ -9,11 +9,11 @@ import OSLog
 import UIKit
 
 /// Responsible for requesting and providing an image by its url.
-class ImageService {
+class ImageService<C: Cache> where C.Key == URL, C.Value == Data {
     private let session: URLSession
-    private let cache: MemoryCache<URL, Data>
+    private let cache: C
 
-    init(session: URLSession, cache: MemoryCache<URL, Data>) {
+    init(session: URLSession, cache: C) {
         self.session = session
         self.cache = cache
     }
