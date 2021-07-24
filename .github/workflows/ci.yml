@@ -15,10 +15,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Generate Env.swift
-        env:
-          content: 'struct Env { let githubAccessToken = "" }'
         run: |
-          echo "$content" > "GitHeart/Env.swift"
+          ./scripts/setup ci
       - name: Build
         run: |
           ./scripts/build
