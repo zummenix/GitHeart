@@ -21,7 +21,7 @@ class DispatchQueueDebouncerTests: XCTestCase {
             counter.value += 1
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 0.2)
+        wait(for: [expectation], timeout: 1.0)
 
         XCTAssertEqual(counter.value, 1)
     }
@@ -35,14 +35,14 @@ class DispatchQueueDebouncerTests: XCTestCase {
             counter.value += 1
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 0.2)
+        wait(for: [expectation], timeout: 1.0)
 
         expectation = XCTestExpectation()
         debouncer.debounce {
             counter.value += 1
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: 0.2)
+        wait(for: [expectation], timeout: 1.0)
 
         XCTAssertEqual(counter.value, 2)
     }
