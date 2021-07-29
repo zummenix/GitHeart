@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # This is a part of the CI.
+# Build: ./scripts/ci build-for-testing
+# Test: ./scripts/ci test-without-building
 
 set -e
 
@@ -9,3 +11,5 @@ DEVICE=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 
 SCHEME="GitHeart"
 PROJECT="GitHeart.xcodeproj"
 DESTINATION="platform=iOS Simulator,name=$DEVICE"
+
+xcodebuild $1 -scheme "$SCHEME" -project "$PROJECT" -destination "$DESTINATION"

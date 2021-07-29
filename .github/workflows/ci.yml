@@ -19,7 +19,7 @@ jobs:
           ./scripts/setup ci
       - name: Build
         run: |
-          ./scripts/build
+          ./scripts/ci build-for-testing
       - name: Test
         run: |
-          ./scripts/test_without_building
+          ./scripts/ci test-without-building

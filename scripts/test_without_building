@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-# This is a part of the CI.
-
-set -e
-
-source scripts/env_vars
-
-xcodebuild test-without-building -scheme "$SCHEME" -project "$PROJECT" -destination "$DESTINATION"
