@@ -37,7 +37,7 @@ class MemoryCacheTests: XCTestCase {
         XCTAssertEqual(cache.totalSize, 0)
     }
 
-    func testEvictsOldValuesAndDoesntOverflow() {
+    func testEvictsOldValuesAndDoesNotOverflow() {
         let cache = createCache(size: 2)
         cache.set(value: "a", for: "a")
         cache.set(value: "b", for: "b")
@@ -47,7 +47,7 @@ class MemoryCacheTests: XCTestCase {
         XCTAssertEqual(cache.totalSize, 2)
     }
 
-    func testDoesntSetBigValue() {
+    func testDoesNotSetValueThatExceedsMaxByteSize() {
         let cache = createCache(size: 2)
         cache.set(value: "aaa", for: "aaa")
         XCTAssertNil(cache.value(forKey: "aaa"))
