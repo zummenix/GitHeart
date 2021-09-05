@@ -94,7 +94,9 @@ extension MemoryCache: Cache {
             self.size = 0
         }
     }
+}
 
+extension MemoryCache: MemoryWarningHandler {
     func freeMemory() {
         removeAll()
     }
