@@ -26,8 +26,8 @@ class API {
         503: APIError(message: "Service Unavailable"),
     ]
 
-    private let baseURL: URL
-    private let env: Env
+    private let baseURL = URL(string: "https://api.github.com")!
+    private let token: String
     private let session: URLSession
     private let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -35,9 +35,8 @@ class API {
         return decoder
     }()
 
-    init(baseURL: URL = URL(string: "https://api.github.com")!, env: Env = Env(), session: URLSession = URLSession.shared) {
-        self.baseURL = baseURL
-        self.env = env
+    init(token: String, session: URLSession) {
+        self.token = token
         self.session = session
     }
 
@@ -50,15 +49,15 @@ class API {
         }
         var request = URLRequest(url: urlComponents.url!)
         request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
-        if !env.githubAccessToken.isEmpty {
-            request.setValue("token \(env.githubAccessToken)", forHTTPHeaderField: "Authorization")
+        if !token.isEmpty {
+            request.setValue("token \(token)", forHTTPHeaderField: "Authorization")
         }
         return request
     }
 
     /// Performs the GET request and decodes the result.
     ///
-    /// The completion block will be called on a queue of the provided `URLSession`.
+    /// The completion block will be called on a queue of the `URLSession` provided in `init`.
     private func get<T: Decodable>(request: URLRequest, completion: @escaping ((Result<T, Error>) -> Void)) {
         let task = session.dataTask(with: request) { [jsonDecoder] data, response, error in
             if let error = error {
