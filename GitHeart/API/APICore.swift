@@ -1,5 +1,5 @@
 //
-//  API.swift
+//  APICore.swift
 //  GitHeart
 //
 //  Created by Aleksey Kuznetsov on 28.06.2021.
@@ -18,7 +18,7 @@ struct APIError: LocalizedError {
 }
 
 /// Implements the minimum of necessary logic for the project to work with the github API.
-class API {
+class APICore {
     private static let errorsByStatusCode: [Int: APIError] = [
         401: APIError(message: "Unauthorized"),
         403: APIError(message: "Rate Limited or Forbidden"),
@@ -41,7 +41,7 @@ class API {
     }
 
     /// Formats a GET request to the API using `path` and `query`.
-    private func request(path: String, query: [String: String]) -> URLRequest {
+    func makeGETRequest(path: String, query: [String: String]) -> URLRequest {
         var urlComponents = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
         urlComponents.path = path
         urlComponents.queryItems = query.map { name, value -> URLQueryItem in
@@ -55,10 +55,10 @@ class API {
         return request
     }
 
-    /// Performs the GET request and decodes the result.
+    /// Performs the request and decodes the result.
     ///
     /// The completion block will be called on a queue of the `URLSession` provided in `init`.
-    private func get<T: Decodable>(request: URLRequest, completion: @escaping ((Result<T, Error>) -> Void)) {
+    func perform<T: Decodable>(request: URLRequest, completion: @escaping ((Result<T, Error>) -> Void)) {
         let task = session.dataTask(with: request) { [jsonDecoder] data, response, error in
             if let error = error {
                 completion(.failure(error))
@@ -66,7 +66,7 @@ class API {
             }
 
             if let response = response as? HTTPURLResponse, response.statusCode >= 400 {
-                if let error = API.errorsByStatusCode[response.statusCode] {
+                if let error = APICore.errorsByStatusCode[response.statusCode] {
                     completion(.failure(error))
                 } else {
                     completion(.failure(APIError(message: "Service Unknown Failure")))
@@ -89,10 +89,10 @@ class API {
     }
 }
 
-extension API: UsersListProvider {
+extension APICore: UsersListProvider {
     func users(searchTerm: String, page: Int, completion: @escaping ((Result<[User], Error>) -> Void)) {
         let query = searchTerm.isEmpty ? "sort:followers" : searchTerm
-        get(request: request(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { result in
+        perform(request: makeGETRequest(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { result in
             DispatchQueue.main.async {
                 completion(result.map { (paginated: PaginatedUsers) in paginated.items })
             }
@@ -100,9 +100,9 @@ extension API: UsersListProvider {
     }
 }
 
-extension API: UserDetailsProvider {
+extension APICore: UserDetailsProvider {
     func userDetails(login: String, completion: @escaping (Result<UserDetails, Error>) -> Void) {
-        get(request: request(path: "/users/\(login)", query: [:])) { result in
+        perform(request: makeGETRequest(path: "/users/\(login)", query: [:])) { result in
             DispatchQueue.main.async {
                 completion(result)
             }

@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window!.makeKeyAndVisible()
         router = Router(window: window!,
                         imageProvider: ImageService(session: URLSession.shared, cache: imageCache),
-                        api: API(token: Env().githubAccessToken, session: URLSession.shared))
+                        api: APICore(token: Env().githubAccessToken, session: URLSession.shared))
         router.start()
         return true
     }
