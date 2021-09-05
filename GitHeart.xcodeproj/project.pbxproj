@@ -174,7 +174,6 @@
 				4D6FEBBC268E0E4700DA3757 /* ImageService */,
 				4D79B3312688A7B4008C1319 /* Extensions */,
 				4D1149C4268B61A700560AA6 /* Views */,
-				4D0A9EEB268858B8006D0F5A /* Models */,
 				4D0A9EC826870260006D0F5A /* Users */,
 				4D238F1626837B9400DC6397 /* Assets.xcassets */,
 				4D0A9ED126870523006D0F5A /* Colors.xcassets */,
@@ -196,6 +195,7 @@
 		4D4B1901269041AC0070E353 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				4D0A9EEB268858B8006D0F5A /* Models */,
 				4D4B1904269041FF0070E353 /* UsersListProvider.swift */,
 				4D4B190A269042FA0070E353 /* UserDetailsProvider.swift */,
 				4D1149C0268A002B00560AA6 /* API.swift */,
