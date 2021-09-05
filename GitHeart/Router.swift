@@ -11,9 +11,9 @@ import UIKit
 class Router {
     let window: UIWindow
     let imageProvider: ImageProvider
-    let api: API
+    let api: UsersListProvider & UserDetailsProvider
 
-    init(window: UIWindow, imageProvider: ImageProvider, api: API = API()) {
+    init(window: UIWindow, imageProvider: ImageProvider, api: UsersListProvider & UserDetailsProvider) {
         self.window = window
         self.imageProvider = imageProvider
         self.api = api
