@@ -11,8 +11,8 @@ import UIKit
 class UserCell: UITableViewCell {
     static let identifier = String(describing: UserCell.self)
 
-    private let avatarImageView: WebImageView = {
-        let imageView = WebImageView(frame: .zero)
+    private let avatarImageView: ImageView = {
+        let imageView = ImageView(frame: .zero)
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = Colors.secondaryBackground
         imageView.clipsToBounds = true

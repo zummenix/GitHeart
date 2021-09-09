@@ -1,5 +1,5 @@
 //
-//  WebImageView.swift
+//  ImageView.swift
 //  GitHeart
 //
 //  Created by Aleksey Kuznetsov on 29.06.2021.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-/// A image view that is able to show an image from the web.
-class WebImageView: UIImageView {
+/// A image view that is able to show an image from an `imageProvider`.
+class ImageView: UIImageView {
     private var task: ImageProviderTask?
 
     override var image: UIImage? {

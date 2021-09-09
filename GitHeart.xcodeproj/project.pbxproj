@@ -17,7 +17,7 @@
 		4D0A9EE82688583A006D0F5A /* UserViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0A9EE72688583A006D0F5A /* UserViewData.swift */; };
 		4D0A9EED268858CB006D0F5A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0A9EEC268858CB006D0F5A /* User.swift */; };
 		4D1149C1268A002B00560AA6 /* APICore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1149C0268A002B00560AA6 /* APICore.swift */; };
-		4D1149C6268B61DA00560AA6 /* WebImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1149C5268B61DA00560AA6 /* WebImageView.swift */; };
+		4D1149C6268B61DA00560AA6 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1149C5268B61DA00560AA6 /* ImageView.swift */; };
 		4D1149CA268B63A200560AA6 /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1149C9268B63A200560AA6 /* MemoryCache.swift */; };
 		4D1149CE268B6A4400560AA6 /* Data+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1149CD268B6A4400560AA6 /* Data+Ex.swift */; };
 		4D1149D4268B6B7B00560AA6 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D1149D3268B6B7B00560AA6 /* ImageService.swift */; };
@@ -66,7 +66,7 @@
 		4D0A9EE72688583A006D0F5A /* UserViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewData.swift; sourceTree = "<group>"; };
 		4D0A9EEC268858CB006D0F5A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4D1149C0268A002B00560AA6 /* APICore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APICore.swift; sourceTree = "<group>"; };
-		4D1149C5268B61DA00560AA6 /* WebImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebImageView.swift; sourceTree = "<group>"; };
+		4D1149C5268B61DA00560AA6 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		4D1149C9268B63A200560AA6 /* MemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCache.swift; sourceTree = "<group>"; };
 		4D1149CD268B6A4400560AA6 /* Data+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Ex.swift"; sourceTree = "<group>"; };
 		4D1149D3268B6B7B00560AA6 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 		4D1149C4268B61A700560AA6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4D1149C5268B61DA00560AA6 /* WebImageView.swift */,
+				4DF7A79D26EA67EB0021EB8E /* ImageView */,
 				4D4000F3268CC4A300FCC612 /* LineActivityIndicatorView.swift */,
 				4D736FE32691BFF600A5260A /* NavigationLogoView.swift */,
 			);
@@ -220,7 +220,6 @@
 		4D6FEBBC268E0E4700DA3757 /* ImageService */ = {
 			isa = PBXGroup;
 			children = (
-				4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */,
 				4D1149D3268B6B7B00560AA6 /* ImageService.swift */,
 			);
 			path = ImageService;
@@ -266,6 +265,15 @@
 				4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */,
 			);
 			path = Debouncer;
+			sourceTree = "<group>";
+		};
+		4DF7A79D26EA67EB0021EB8E /* ImageView */ = {
+			isa = PBXGroup;
+			children = (
+				4D6FEBBF268E0E6A00DA3757 /* ImageProvider.swift */,
+				4D1149C5268B61DA00560AA6 /* ImageView.swift */,
+			);
+			path = ImageView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -398,7 +406,7 @@
 				4D1149D4268B6B7B00560AA6 /* ImageService.swift in Sources */,
 				4D0A9EDA268706C6006D0F5A /* UsersListViewModel.swift in Sources */,
 				4D0A9ED6268705A4006D0F5A /* Colors.swift in Sources */,
-				4D1149C6268B61DA00560AA6 /* WebImageView.swift in Sources */,
+				4D1149C6268B61DA00560AA6 /* ImageView.swift in Sources */,
 				4D66A39926E4F3450051C99A /* MemoryWarningHandler.swift in Sources */,
 				4D736FE42691BFF600A5260A /* NavigationLogoView.swift in Sources */,
 				4D1149CE268B6A4400560AA6 /* Data+Ex.swift in Sources */,
