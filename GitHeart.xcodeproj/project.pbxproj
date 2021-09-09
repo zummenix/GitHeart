@@ -42,6 +42,7 @@
 		4DC7B207269CA56500FE84A1 /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B206269CA56500FE84A1 /* Debouncer.swift */; };
 		4DC7B20B269CA62B00FE84A1 /* DispatchQueueDebouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */; };
 		4DC7B20F269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */; };
+		4DF7A79B26EA5D400021EB8E /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF7A79A26EA5D400021EB8E /* MainRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		4DC7B206269CA56500FE84A1 /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 		4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueDebouncer.swift; sourceTree = "<group>"; };
 		4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueDebouncerTests.swift; sourceTree = "<group>"; };
+		4DF7A79A26EA5D400021EB8E /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +169,7 @@
 				4D4B191726908DAA0070E353 /* Env.swift */,
 				4D238F0D26837B9300DC6397 /* AppDelegate.swift */,
 				4D238F7D26837ED100DC6397 /* Router.swift */,
+				4DF7A79A26EA5D400021EB8E /* MainRouter.swift */,
 				4D0A9ED5268705A4006D0F5A /* Colors.swift */,
 				4DC7B205269CA53E00FE84A1 /* Debouncer */,
 				4D4B1901269041AC0070E353 /* API */,
@@ -401,6 +404,7 @@
 				4D1149CE268B6A4400560AA6 /* Data+Ex.swift in Sources */,
 				4D238F0E26837B9300DC6397 /* AppDelegate.swift in Sources */,
 				4D0A9EE4268853AC006D0F5A /* UserCell.swift in Sources */,
+				4DF7A79B26EA5D400021EB8E /* MainRouter.swift in Sources */,
 				4D1149CA268B63A200560AA6 /* MemoryCache.swift in Sources */,
 				4D4000F4268CC4A300FCC612 /* LineActivityIndicatorView.swift in Sources */,
 				4D0A9EE02687075C006D0F5A /* UserDetailsViewModel.swift in Sources */,

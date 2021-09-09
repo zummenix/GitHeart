@@ -43,9 +43,7 @@ class UsersListViewModel {
     /// Called when an error has occurred.
     var didFail: ((Error) -> Void)?
 
-    init(usersListProvider: UsersListProvider, imageProvider: ImageProvider,
-         searchDebouncer: Debouncer = DispatchQueueDebouncer(timeInterval: .seconds(1)))
-    {
+    init(usersListProvider: UsersListProvider, imageProvider: ImageProvider, searchDebouncer: Debouncer) {
         self.usersListProvider = usersListProvider
         self.imageProvider = imageProvider
         self.searchDebouncer = searchDebouncer
