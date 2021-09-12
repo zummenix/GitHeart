@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func composeMainRouter() -> MainRouter {
         let session = URLSession.shared
         let imageService = ImageService(session: session, cache: imageCache)
-        let apiCore = APICore(token: Env().githubAccessToken, session: session)
+        let apiCore = APICore(token: Env.githubAccessToken, session: session)
         return MainRouter(window: window!, dependencies: MainRouter.Dependencies(
             imageProvider: {
                 imageService

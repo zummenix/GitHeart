@@ -17,7 +17,7 @@ function writeEnvFile {
 // To update the file, please run './scripts/setup' again.
 
 struct Env {
-    let githubAccessToken = "$1"
+    static let githubAccessToken = "$1"
 }
 EOM
 }
