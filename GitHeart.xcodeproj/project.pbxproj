@@ -39,6 +39,7 @@
 		4D79B32E268896AE008C1319 /* UserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B32D268896AE008C1319 /* UserDetails.swift */; };
 		4D79B3372688A7EE008C1319 /* UINavigationBar+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */; };
 		4D8389FC26A0748C00203165 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8389FB26A0748C00203165 /* Cache.swift */; };
+		4D9239B026F39B4B00606CDA /* UsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9239AF26F39B4B00606CDA /* UsersService.swift */; };
 		4DC7B207269CA56500FE84A1 /* Debouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B206269CA56500FE84A1 /* Debouncer.swift */; };
 		4DC7B20B269CA62B00FE84A1 /* DispatchQueueDebouncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */; };
 		4DC7B20F269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */; };
@@ -93,6 +94,7 @@
 		4D79B32D268896AE008C1319 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Ex.swift"; sourceTree = "<group>"; };
 		4D8389FB26A0748C00203165 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		4D9239AF26F39B4B00606CDA /* UsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersService.swift; sourceTree = "<group>"; };
 		4DC7B206269CA56500FE84A1 /* Debouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debouncer.swift; sourceTree = "<group>"; };
 		4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueDebouncer.swift; sourceTree = "<group>"; };
 		4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueDebouncerTests.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				4D0A9EEB268858B8006D0F5A /* Models */,
 				4D4B1904269041FF0070E353 /* UsersListProvider.swift */,
 				4D4B190A269042FA0070E353 /* UserDetailsProvider.swift */,
+				4D9239AF26F39B4B00606CDA /* UsersService.swift */,
 				4D1149C0268A002B00560AA6 /* APICore.swift */,
 			);
 			path = API;
@@ -413,6 +416,7 @@
 				4D238F0E26837B9300DC6397 /* AppDelegate.swift in Sources */,
 				4D0A9EE4268853AC006D0F5A /* UserCell.swift in Sources */,
 				4DF7A79B26EA5D400021EB8E /* MainRouter.swift in Sources */,
+				4D9239B026F39B4B00606CDA /* UsersService.swift in Sources */,
 				4D1149CA268B63A200560AA6 /* MemoryCache.swift in Sources */,
 				4D4000F4268CC4A300FCC612 /* LineActivityIndicatorView.swift in Sources */,
 				4D0A9EE02687075C006D0F5A /* UserDetailsViewModel.swift in Sources */,

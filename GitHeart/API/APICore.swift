@@ -17,6 +17,11 @@ struct APIError: LocalizedError {
     }
 }
 
+struct APIResponse<T> {
+    let data: T
+    let headerFields: [AnyHashable: Any]
+}
+
 /// Implements the minimum of necessary logic for the project to work with the github API.
 class APICore {
     private static let errorsByStatusCode: [Int: APIError] = [
@@ -47,7 +52,12 @@ class APICore {
         urlComponents.queryItems = query.map { name, value -> URLQueryItem in
             URLQueryItem(name: name, value: value)
         }
-        var request = URLRequest(url: urlComponents.url!)
+        return enriched(request: URLRequest(url: urlComponents.url!))
+    }
+
+    /// Enriches the request with necessary headers.
+    func enriched(request: URLRequest) -> URLRequest {
+        var request = request
         request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
         if !token.isEmpty {
             request.setValue("token \(token)", forHTTPHeaderField: "Authorization")
@@ -58,26 +68,30 @@ class APICore {
     /// Performs the request and decodes the result.
     ///
     /// The completion block will be called on a queue of the `URLSession` provided in `init`.
-    func perform<T: Decodable>(request: URLRequest, completion: @escaping ((Result<T, Error>) -> Void)) {
+    func perform<T: Decodable>(request: URLRequest, completion: @escaping ((Result<APIResponse<T>, Error>) -> Void)) {
         let task = session.dataTask(with: request) { [jsonDecoder] data, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
             }
 
-            if let response = response as? HTTPURLResponse, response.statusCode >= 400 {
-                if let error = APICore.errorsByStatusCode[response.statusCode] {
-                    completion(.failure(error))
-                } else {
-                    completion(.failure(APIError(message: "Service Unknown Failure")))
+            var headerFields: [AnyHashable: Any] = [:]
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode >= 400 {
+                    if let error = APICore.errorsByStatusCode[response.statusCode] {
+                        completion(.failure(error))
+                    } else {
+                        completion(.failure(APIError(message: "Service Unknown Failure")))
+                    }
+                    return
                 }
-                return
+                headerFields = response.allHeaderFields
             }
 
             if let data = data {
                 do {
                     let result = try jsonDecoder.decode(T.self, from: data)
-                    completion(.success(result))
+                    completion(.success(APIResponse(data: result, headerFields: headerFields)))
                 } catch {
                     completion(.failure(error))
                 }
@@ -86,26 +100,5 @@ class APICore {
             }
         }
         task.resume()
-    }
-}
-
-extension APICore: UsersListProvider {
-    func users(searchTerm: String, page: Int, completion: @escaping ((Result<[User], Error>) -> Void)) {
-        let query = searchTerm.isEmpty ? "sort:followers" : searchTerm
-        perform(request: makeGETRequest(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { result in
-            DispatchQueue.main.async {
-                completion(result.map { (paginated: PaginatedUsers) in paginated.items })
-            }
-        })
-    }
-}
-
-extension APICore: UserDetailsProvider {
-    func userDetails(login: String, completion: @escaping (Result<UserDetails, Error>) -> Void) {
-        perform(request: makeGETRequest(path: "/users/\(login)", query: [:])) { result in
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        }
     }
 }
