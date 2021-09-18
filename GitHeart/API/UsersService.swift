@@ -26,7 +26,7 @@ extension UsersService: UsersListProvider {
         apiCore.perform(request: apiCore.makeGETRequest(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { [jsonDecoder] result in
             let result = result.flatMap { response in
                 Result { try jsonDecoder.decode(PaginatedUsers.self, from: response.data) }.map { paginatedUsers in
-                    UsersList(users: paginatedUsers.items, next: nil)
+                    UsersList(users: paginatedUsers.items, next: parseHeaderLink((response.headerFields["Link"] as? String) ?? "")["next"])
                 }
             }
             DispatchQueue.main.async {
@@ -47,4 +47,24 @@ extension UsersService: UserDetailsProvider {
             }
         }
     }
+}
+
+/// Parses a header link and returns a dictionary.
+///
+/// Example: <https://api.github.com/search/users?page=2&q=sort%3Afollowers>; rel="next",
+///          <https://api.github.com/search/users?page=34&q=sort%3Afollowers>; rel="last"
+private func parseHeaderLink(_ link: String) -> [String: URL] {
+    // Scanner is only available starting from iOS 13, so a workaround:
+    var result: [String: URL] = [:]
+    for pair in link.components(separatedBy: ",") {
+        let parts = pair.components(separatedBy: ";")
+        if parts.count == 2 {
+            let rawLink = parts[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn: "<>")))
+            let key = parts[1].drop(while: { $0 != "\"" }).trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+            if let url = URL(string: rawLink) {
+                result[key] = url
+            }
+        }
+    }
+    return result
 }

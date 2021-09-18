@@ -19,6 +19,22 @@ class UsersServiceTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
 
+    func testExtractNextPageURLForUsersList() throws {
+        let sut = makeSUT(mockedResponse: .success(.init(data: try data(forResource: "users.json"),
+                                                         headerFields: ["Link": """
+                                                         <https://api.github.com/search/users?page=2&q=sort%3Afollowers>; rel="next", <https://api.github.com/search/users?page=34&q=sort%3Afollowers>; rel="last"
+                                                         """])))
+        let exp = expectation(description: "correctly decoded response")
+        sut.users(searchTerm: "", page: 0) { result in
+            let usersList = try? result.get()
+            XCTAssertNotNil(usersList)
+            XCTAssertNotNil(usersList?.next)
+            XCTAssertEqual(usersList?.next, URL(string: "https://api.github.com/search/users?page=2&q=sort%3Afollowers"))
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+
     func testDecodeUserDetails() throws {
         let sut = makeSUT(mockedResponse: .success(.init(data: try data(forResource: "details.json"), headerFields: [:])))
         let exp = expectation(description: "correctly decoded response")
