@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Responsible for providing API interface to users.
 class UsersService {
     private let apiCore: APICore
     private let jsonDecoder: JSONDecoder = {
