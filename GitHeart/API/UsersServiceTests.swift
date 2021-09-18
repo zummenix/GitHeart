@@ -12,7 +12,7 @@ class UsersServiceTests: XCTestCase {
     func testDecodeUsersList() throws {
         let sut = makeSUT(mockedResponse: .success(.init(data: try data(forResource: "users.json"), headerFields: [:])))
         let exp = expectation(description: "correctly decoded response")
-        sut.users(searchTerm: "", page: 0) { result in
+        sut.users(searchTerm: "") { result in
             XCTAssertNotNil(try? result.get())
             exp.fulfill()
         }
@@ -25,7 +25,7 @@ class UsersServiceTests: XCTestCase {
                                                          <https://api.github.com/search/users?page=2&q=sort%3Afollowers>; rel="next", <https://api.github.com/search/users?page=34&q=sort%3Afollowers>; rel="last"
                                                          """])))
         let exp = expectation(description: "correctly decoded response")
-        sut.users(searchTerm: "", page: 0) { result in
+        sut.users(searchTerm: "") { result in
             let usersList = try? result.get()
             XCTAssertNotNil(usersList)
             XCTAssertNotNil(usersList?.next)

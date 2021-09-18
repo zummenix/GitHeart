@@ -12,8 +12,8 @@ class UsersListViewModel {
     private let usersListProvider: UsersListProvider
     private let searchDebouncer: Debouncer
     private var users: [User] = []
-    private var page: Int = 1 // The number of a page that will be requested next.
     private var isLastPage: Bool = false
+    private var nextPageURL: URL?
 
     /// Shows whether the loading is in progress.
     private(set) var isLoading: Bool = false {
@@ -55,21 +55,28 @@ class UsersListViewModel {
     func load() {
         guard !isLoading, !isLastPage else { return }
         isLoading = true
-        usersListProvider.users(searchTerm: searchText, page: page) { [weak self] result in
+
+        let completion: ((Result<UsersList, Error>) -> Void) = { [weak self] result in
             guard let self = self else { return }
-            if self.page == 1 {
+            if !self.isLastPage, self.nextPageURL == nil {
                 self.users = []
             }
             self.isLoading = false
             switch result {
             case let .success(usersList):
                 self.users.append(contentsOf: usersList.users)
-                self.isLastPage = usersList.users.isEmpty
-                self.page += 1
+                self.nextPageURL = usersList.next
+                self.isLastPage = self.nextPageURL == nil
                 self.didUpdateUsersList?()
             case let .failure(error):
                 self.didFail?(error)
             }
+        }
+
+        if let url = nextPageURL {
+            usersListProvider.users(url: url, completion: completion)
+        } else {
+            usersListProvider.users(searchTerm: searchText, completion: completion)
         }
     }
 
@@ -79,8 +86,8 @@ class UsersListViewModel {
     func applySearch(text: String) {
         guard searchText != text else { return }
         searchText = text
-        page = 1
         isLastPage = false
+        nextPageURL = nil
 
         searchDebouncer.debounce { [weak self] in
             guard let self = self else { return }

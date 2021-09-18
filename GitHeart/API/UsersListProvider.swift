@@ -14,6 +14,9 @@ struct UsersList {
 
 /// A type that provides the list of users.
 protocol UsersListProvider {
-    /// Requests the list of users by a `page` and applying `searchTerm` if not empty.
-    func users(searchTerm: String, page: Int, completion: @escaping ((Result<UsersList, Error>) -> Void))
+    /// Requests the first page of users applying `searchTerm` if not empty.
+    func users(searchTerm: String, completion: @escaping ((Result<UsersList, Error>) -> Void))
+
+    /// Requests the next pages of users.
+    func users(url: URL, completion: @escaping ((Result<UsersList, Error>) -> Void))
 }

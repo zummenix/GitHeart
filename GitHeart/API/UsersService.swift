@@ -21,9 +21,17 @@ class UsersService {
 }
 
 extension UsersService: UsersListProvider {
-    func users(searchTerm: String, page: Int, completion: @escaping ((Result<UsersList, Error>) -> Void)) {
+    func users(searchTerm: String, completion: @escaping ((Result<UsersList, Error>) -> Void)) {
         let query = searchTerm.isEmpty ? "sort:followers" : searchTerm
-        apiCore.perform(request: apiCore.makeGETRequest(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { [jsonDecoder] result in
+        users(request: apiCore.makeGETRequest(path: "/search/users", query: ["q": query]), completion: completion)
+    }
+
+    func users(url: URL, completion: @escaping ((Result<UsersList, Error>) -> Void)) {
+        users(request: URLRequest(url: url), completion: completion)
+    }
+
+    private func users(request: URLRequest, completion: @escaping ((Result<UsersList, Error>) -> Void)) {
+        apiCore.perform(request: request, completion: { [jsonDecoder] result in
             let result = result.flatMap { response in
                 Result { try jsonDecoder.decode(PaginatedUsers.self, from: response.data) }.map { paginatedUsers in
                     UsersList(users: paginatedUsers.items, next: parseHeaderLink((response.headerFields["Link"] as? String) ?? "")["next"])
