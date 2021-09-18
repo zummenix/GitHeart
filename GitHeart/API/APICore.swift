@@ -17,8 +17,8 @@ struct APIError: LocalizedError {
     }
 }
 
-struct APIResponse<T> {
-    let data: T
+struct APIResponse {
+    let data: Data
     let headerFields: [AnyHashable: Any]
 }
 
@@ -34,11 +34,6 @@ class APICore {
     private let baseURL = URL(string: "https://api.github.com")!
     private let token: String
     private let session: URLSession
-    private let jsonDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }()
 
     init(token: String, session: URLSession) {
         self.token = token
@@ -52,11 +47,13 @@ class APICore {
         urlComponents.queryItems = query.map { name, value -> URLQueryItem in
             URLQueryItem(name: name, value: value)
         }
-        return enriched(request: URLRequest(url: urlComponents.url!))
+        return URLRequest(url: urlComponents.url!)
     }
 
-    /// Enriches the request with necessary headers.
-    func enriched(request: URLRequest) -> URLRequest {
+    /// Returns the modified request by adding necessary headers.
+    ///
+    /// This method is called right before performing the request.
+    func modified(request: URLRequest) -> URLRequest {
         var request = request
         request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
         if !token.isEmpty {
@@ -65,11 +62,11 @@ class APICore {
         return request
     }
 
-    /// Performs the request and decodes the result.
+    /// Performs the request.
     ///
     /// The completion block will be called on a queue of the `URLSession` provided in `init`.
-    func perform<T: Decodable>(request: URLRequest, completion: @escaping ((Result<APIResponse<T>, Error>) -> Void)) {
-        let task = session.dataTask(with: request) { [jsonDecoder] data, response, error in
+    func perform(request: URLRequest, completion: @escaping ((Result<APIResponse, Error>) -> Void)) {
+        let task = session.dataTask(with: modified(request: request)) { data, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
@@ -88,13 +85,8 @@ class APICore {
                 headerFields = response.allHeaderFields
             }
 
-            if let data = data {
-                do {
-                    let result = try jsonDecoder.decode(T.self, from: data)
-                    completion(.success(APIResponse(data: result, headerFields: headerFields)))
-                } catch {
-                    completion(.failure(error))
-                }
+            if let data = data, !data.isEmpty {
+                completion(.success(APIResponse(data: data, headerFields: headerFields)))
             } else {
                 completion(.failure(APIError(message: "Empty Response")))
             }
