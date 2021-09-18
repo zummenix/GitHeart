@@ -7,33 +7,34 @@
 
 import Foundation
 
-/// A simple error type for the API.
-struct APIError: LocalizedError {
-    /// A readable message that typically should be shown to a user.
-    let message: String
-
-    var errorDescription: String? {
-        return message
-    }
-}
-
 /// Implements the minimum of necessary logic for the project to work with the github API.
 class APICore {
-    private static let errorsByStatusCode: [Int: APIError] = [
-        401: APIError(message: "Unauthorized"),
-        403: APIError(message: "Rate Limited or Forbidden"),
-        422: APIError(message: "Unprocessable Entity"),
-        503: APIError(message: "Service Unavailable"),
+    /// A response representation for the API.
+    struct Response {
+        let data: Data
+        let headerFields: [AnyHashable: Any]
+    }
+
+    /// A simple error type for the API.
+    struct Error: LocalizedError {
+        /// A readable message that typically should be shown to a user.
+        let message: String
+
+        var errorDescription: String? {
+            return message
+        }
+    }
+
+    private static let errorsByStatusCode: [Int: Error] = [
+        401: Error(message: "Unauthorized"),
+        403: Error(message: "Rate Limited or Forbidden"),
+        422: Error(message: "Unprocessable Entity"),
+        503: Error(message: "Service Unavailable"),
     ]
 
     private let baseURL = URL(string: "https://api.github.com")!
     private let token: String
     private let session: URLSession
-    private let jsonDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return decoder
-    }()
 
     init(token: String, session: URLSession) {
         self.token = token
@@ -47,7 +48,14 @@ class APICore {
         urlComponents.queryItems = query.map { name, value -> URLQueryItem in
             URLQueryItem(name: name, value: value)
         }
-        var request = URLRequest(url: urlComponents.url!)
+        return URLRequest(url: urlComponents.url!)
+    }
+
+    /// Returns the modified request by adding necessary headers.
+    ///
+    /// This method is called right before performing the request.
+    func modified(request: URLRequest) -> URLRequest {
+        var request = request
         request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
         if !token.isEmpty {
             request.setValue("token \(token)", forHTTPHeaderField: "Authorization")
@@ -55,57 +63,35 @@ class APICore {
         return request
     }
 
-    /// Performs the request and decodes the result.
+    /// Performs the request.
     ///
     /// The completion block will be called on a queue of the `URLSession` provided in `init`.
-    func perform<T: Decodable>(request: URLRequest, completion: @escaping ((Result<T, Error>) -> Void)) {
-        let task = session.dataTask(with: request) { [jsonDecoder] data, response, error in
+    func perform(request: URLRequest, completion: @escaping ((Result<Response, Swift.Error>) -> Void)) {
+        let task = session.dataTask(with: modified(request: request)) { data, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
             }
 
-            if let response = response as? HTTPURLResponse, response.statusCode >= 400 {
-                if let error = APICore.errorsByStatusCode[response.statusCode] {
-                    completion(.failure(error))
-                } else {
-                    completion(.failure(APIError(message: "Service Unknown Failure")))
+            var headerFields: [AnyHashable: Any] = [:]
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode >= 400 {
+                    if let error = APICore.errorsByStatusCode[response.statusCode] {
+                        completion(.failure(error))
+                    } else {
+                        completion(.failure(Error(message: "Service Unknown Failure")))
+                    }
+                    return
                 }
-                return
+                headerFields = response.allHeaderFields
             }
 
-            if let data = data {
-                do {
-                    let result = try jsonDecoder.decode(T.self, from: data)
-                    completion(.success(result))
-                } catch {
-                    completion(.failure(error))
-                }
+            if let data = data, !data.isEmpty {
+                completion(.success(Response(data: data, headerFields: headerFields)))
             } else {
-                completion(.failure(APIError(message: "Empty Response")))
+                completion(.failure(Error(message: "Empty Response")))
             }
         }
         task.resume()
-    }
-}
-
-extension APICore: UsersListProvider {
-    func users(searchTerm: String, page: Int, completion: @escaping ((Result<[User], Error>) -> Void)) {
-        let query = searchTerm.isEmpty ? "sort:followers" : searchTerm
-        perform(request: makeGETRequest(path: "/search/users", query: ["q": query, "page": String(page)]), completion: { result in
-            DispatchQueue.main.async {
-                completion(result.map { (paginated: PaginatedUsers) in paginated.items })
-            }
-        })
-    }
-}
-
-extension APICore: UserDetailsProvider {
-    func userDetails(login: String, completion: @escaping (Result<UserDetails, Error>) -> Void) {
-        perform(request: makeGETRequest(path: "/users/\(login)", query: [:])) { result in
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        }
     }
 }
