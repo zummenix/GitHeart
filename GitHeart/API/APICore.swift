@@ -7,28 +7,29 @@
 
 import Foundation
 
-/// A simple error type for the API.
-struct APIError: LocalizedError {
-    /// A readable message that typically should be shown to a user.
-    let message: String
-
-    var errorDescription: String? {
-        return message
-    }
-}
-
-struct APIResponse {
-    let data: Data
-    let headerFields: [AnyHashable: Any]
-}
-
 /// Implements the minimum of necessary logic for the project to work with the github API.
 class APICore {
-    private static let errorsByStatusCode: [Int: APIError] = [
-        401: APIError(message: "Unauthorized"),
-        403: APIError(message: "Rate Limited or Forbidden"),
-        422: APIError(message: "Unprocessable Entity"),
-        503: APIError(message: "Service Unavailable"),
+    /// A response representation for the API.
+    struct Response {
+        let data: Data
+        let headerFields: [AnyHashable: Any]
+    }
+
+    /// A simple error type for the API.
+    struct Error: LocalizedError {
+        /// A readable message that typically should be shown to a user.
+        let message: String
+
+        var errorDescription: String? {
+            return message
+        }
+    }
+
+    private static let errorsByStatusCode: [Int: Error] = [
+        401: Error(message: "Unauthorized"),
+        403: Error(message: "Rate Limited or Forbidden"),
+        422: Error(message: "Unprocessable Entity"),
+        503: Error(message: "Service Unavailable"),
     ]
 
     private let baseURL = URL(string: "https://api.github.com")!
@@ -65,7 +66,7 @@ class APICore {
     /// Performs the request.
     ///
     /// The completion block will be called on a queue of the `URLSession` provided in `init`.
-    func perform(request: URLRequest, completion: @escaping ((Result<APIResponse, Error>) -> Void)) {
+    func perform(request: URLRequest, completion: @escaping ((Result<Response, Swift.Error>) -> Void)) {
         let task = session.dataTask(with: modified(request: request)) { data, response, error in
             if let error = error {
                 completion(.failure(error))
@@ -78,7 +79,7 @@ class APICore {
                     if let error = APICore.errorsByStatusCode[response.statusCode] {
                         completion(.failure(error))
                     } else {
-                        completion(.failure(APIError(message: "Service Unknown Failure")))
+                        completion(.failure(Error(message: "Service Unknown Failure")))
                     }
                     return
                 }
@@ -86,9 +87,9 @@ class APICore {
             }
 
             if let data = data, !data.isEmpty {
-                completion(.success(APIResponse(data: data, headerFields: headerFields)))
+                completion(.success(Response(data: data, headerFields: headerFields)))
             } else {
-                completion(.failure(APIError(message: "Empty Response")))
+                completion(.failure(Error(message: "Empty Response")))
             }
         }
         task.resume()
