@@ -15,8 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow()
+        window!.tintColor = Colors.tintColor
         window!.makeKeyAndVisible()
-        router = composeMainRouter()
+
+        let navigationController = UINavigationController()
+        window!.rootViewController = navigationController
+
+        router = composeMainRouter(navigationController: navigationController)
         router.start()
         return true
     }
@@ -25,11 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         imageCache.freeMemory()
     }
 
-    private func composeMainRouter() -> MainRouter {
+    private func composeMainRouter(navigationController: UINavigationController) -> MainRouter {
         let session = URLSession.shared
         let imageService = ImageService(session: session, cache: imageCache)
         let usersService = UsersService(apiCore: APICore(token: Env.githubAccessToken, session: session))
-        return MainRouter(window: window!, dependencies: MainRouter.Dependencies(
+        return MainRouter(navigationController: navigationController, dependencies: MainRouter.Dependencies(
             imageProvider: {
                 imageService
             }, usersSearchDebounder: {

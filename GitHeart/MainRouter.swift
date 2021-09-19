@@ -16,13 +16,12 @@ class MainRouter: Router {
         let userDetailsProvider: () -> UserDetailsProvider
     }
 
-    let window: UIWindow
+    let navigationController: UINavigationController
     let dependencies: Dependencies
 
-    init(window: UIWindow, dependencies: Dependencies) {
-        self.window = window
+    init(navigationController: UINavigationController, dependencies: Dependencies) {
+        self.navigationController = navigationController
         self.dependencies = dependencies
-        window.tintColor = Colors.tintColor
     }
 
     func start() {
@@ -31,7 +30,7 @@ class MainRouter: Router {
                                            searchDebouncer: dependencies.usersSearchDebounder())
         let controller = UsersListViewController(viewModel: viewModel)
         controller.didTapUser = { [weak self] user in self?.showUserDetails(user) }
-        window.rootViewController = UINavigationController(rootViewController: controller)
+        navigationController.show(controller, sender: nil)
     }
 
     private func showUserDetails(_ user: User) {
@@ -40,11 +39,11 @@ class MainRouter: Router {
                                              imageProvider: dependencies.imageProvider())
         let controller = UserDetailsViewController(viewModel: viewModel)
         controller.didTapShareUserUrl = { [weak self] url in self?.showActivityFor(url: url) }
-        window.rootViewController?.show(controller, sender: nil)
+        navigationController.show(controller, sender: nil)
     }
 
     private func showActivityFor(url: URL) {
         let ac = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        window.rootViewController?.present(ac, animated: true, completion: nil)
+        navigationController.present(ac, animated: true, completion: nil)
     }
 }
