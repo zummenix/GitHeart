@@ -6,8 +6,7 @@
 
 set -e
 
-# xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
-DEVICE=$(xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}')
+DEVICE=$(xcrun simctl list devices available | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}')
 SCHEME="GitHeart"
 PROJECT="GitHeart.xcodeproj"
 DESTINATION="platform=iOS Simulator,name=$DEVICE"
