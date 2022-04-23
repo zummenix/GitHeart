@@ -10,10 +10,9 @@ import UIKit
 /// The main router of the app.
 class MainRouter: Router {
     struct Dependencies {
-        let imageProvider: () -> ImageProvider
-        let usersSearchDebounder: () -> Debouncer
-        let usersListProvider: () -> UsersListProvider
-        let userDetailsProvider: () -> UserDetailsProvider
+        let usersListFactory: (_ didTapUser: @escaping (User) -> Void) -> UIViewController
+        let userDetailsFactory: (_ user: User, _ didTapShareUserUrl: @escaping (URL) -> Void) -> UIViewController
+        let activityFactory: (_ url: URL) -> UIViewController
     }
 
     let navigationController: UINavigationController
@@ -25,25 +24,16 @@ class MainRouter: Router {
     }
 
     func start() {
-        let viewModel = UsersListViewModel(usersListProvider: dependencies.usersListProvider(),
-                                           imageProvider: dependencies.imageProvider(),
-                                           searchDebouncer: dependencies.usersSearchDebounder())
-        let controller = UsersListViewController(viewModel: viewModel)
-        controller.didTapUser = { [weak self] user in self?.showUserDetails(user) }
+        let controller = dependencies.usersListFactory { [weak self] user in self?.showUserDetails(user) }
         navigationController.show(controller, sender: nil)
     }
 
     private func showUserDetails(_ user: User) {
-        let viewModel = UserDetailsViewModel(user: user,
-                                             userDetailsProvider: dependencies.userDetailsProvider(),
-                                             imageProvider: dependencies.imageProvider())
-        let controller = UserDetailsViewController(viewModel: viewModel)
-        controller.didTapShareUserUrl = { [weak self] url in self?.showActivityFor(url: url) }
+        let controller = dependencies.userDetailsFactory(user) { [weak self] url in self?.showActivityFor(url: url) }
         navigationController.show(controller, sender: nil)
     }
 
     private func showActivityFor(url: URL) {
-        let ac = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        navigationController.present(ac, animated: true, completion: nil)
+        navigationController.present(dependencies.activityFactory(url), animated: true, completion: nil)
     }
 }

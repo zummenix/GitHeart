@@ -35,14 +35,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let imageService = ImageService(session: session, cache: imageCache)
         let usersService = UsersService(apiCore: APICore(token: Env.githubAccessToken, session: session))
         return MainRouter(navigationController: navigationController, dependencies: MainRouter.Dependencies(
-            imageProvider: {
-                imageService
-            }, usersSearchDebounder: {
-                DispatchQueueDebouncer(timeInterval: .seconds(1))
-            }, usersListProvider: {
-                usersService
-            }, userDetailsProvider: {
-                usersService
+            usersListFactory: { didTapUser in
+                let controller = UsersListViewController(
+                    viewModel: UsersListViewModel(
+                        usersListProvider: usersService,
+                        imageProvider: imageService,
+                        searchDebouncer: DispatchQueueDebouncer(timeInterval: .seconds(1))
+                    )
+                )
+                controller.didTapUser = didTapUser
+                return controller
+            }, userDetailsFactory: { user, didTapShareUserUrl in
+                let controller = UserDetailsViewController(
+                    viewModel: UserDetailsViewModel(
+                        user: user,
+                        userDetailsProvider: usersService,
+                        imageProvider: imageService
+                    )
+                )
+                controller.didTapShareUserUrl = didTapShareUserUrl
+                return controller
+            }, activityFactory: { url in
+                UIActivityViewController(activityItems: [url], applicationActivities: nil)
             }
         ))
     }
