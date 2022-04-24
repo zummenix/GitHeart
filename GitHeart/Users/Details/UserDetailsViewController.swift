@@ -29,7 +29,7 @@ class UserDetailsViewController: UIViewController {
     }()
 
     /// Called when user taps share user's GitHub page.
-    var didTapShareUserUrl: ((URL) -> Void)?
+    var didTapShareUserUrl: ((URL, UIBarButtonItem) -> Void)?
 
     init(viewModel: UserDetailsViewModel) {
         self.viewModel = viewModel
@@ -90,8 +90,8 @@ class UserDetailsViewController: UIViewController {
         contentView.configure(viewModel.contentViewData())
     }
 
-    @objc private func share(_: UIBarButtonItem) {
+    @objc private func share(_ sender: UIBarButtonItem) {
         guard let url = viewModel.userUrl else { return }
-        didTapShareUserUrl?(url)
+        didTapShareUserUrl?(url, sender)
     }
 }

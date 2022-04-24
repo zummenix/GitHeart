@@ -55,8 +55,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 )
                 controller.didTapShareUserUrl = didTapShareUserUrl
                 return controller
-            }, activityFactory: { url in
-                UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            }, activityFactory: { url, sender in
+                let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                controller.popoverPresentationController?.barButtonItem = sender
+                return controller
             }
         ))
     }

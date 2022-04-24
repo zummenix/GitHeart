@@ -11,8 +11,11 @@ import UIKit
 class MainRouter: Router {
     struct Dependencies {
         let usersListFactory: (_ didTapUser: @escaping (User) -> Void) -> UIViewController
-        let userDetailsFactory: (_ user: User, _ didTapShareUserUrl: @escaping (URL) -> Void) -> UIViewController
-        let activityFactory: (_ url: URL) -> UIViewController
+        let userDetailsFactory: (
+            _ user: User,
+            _ didTapShareUserUrl: @escaping (URL, UIBarButtonItem) -> Void
+        ) -> UIViewController
+        let activityFactory: (_ url: URL, UIBarButtonItem) -> UIViewController
     }
 
     let navigationController: UINavigationController
@@ -29,11 +32,13 @@ class MainRouter: Router {
     }
 
     private func showUserDetails(_ user: User) {
-        let controller = dependencies.userDetailsFactory(user) { [weak self] url in self?.showActivityFor(url: url) }
+        let controller = dependencies.userDetailsFactory(user) { [weak self] url, sender in
+            self?.showActivityFor(url: url, sender: sender)
+        }
         navigationController.show(controller, sender: nil)
     }
 
-    private func showActivityFor(url: URL) {
-        navigationController.present(dependencies.activityFactory(url), animated: true, completion: nil)
+    private func showActivityFor(url: URL, sender: UIBarButtonItem) {
+        navigationController.present(dependencies.activityFactory(url, sender), animated: true, completion: nil)
     }
 }
