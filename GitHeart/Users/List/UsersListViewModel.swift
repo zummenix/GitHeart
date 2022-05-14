@@ -10,7 +10,7 @@ import Foundation
 /// A view model for the users' list.
 class UsersListViewModel {
     private let usersListProvider: UsersListProvider
-    private let searchDebouncer: Debouncer
+    private var searchDebouncer: Debouncer
     private var users: [User] = []
     private var isLastPage: Bool = false
     private var nextPageURL: URL?
@@ -43,7 +43,11 @@ class UsersListViewModel {
     /// Called when an error has occurred.
     var didFail: ((Error) -> Void)?
 
-    init(usersListProvider: UsersListProvider, imageProvider: ImageProvider, searchDebouncer: Debouncer) {
+    init(
+        usersListProvider: UsersListProvider,
+        imageProvider: ImageProvider,
+        searchDebouncer: Debouncer = DispatchQueueDebouncer(timeInterval: .seconds(1))
+    ) {
         self.usersListProvider = usersListProvider
         self.imageProvider = imageProvider
         self.searchDebouncer = searchDebouncer

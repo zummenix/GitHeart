@@ -12,7 +12,7 @@ class DispatchQueueDebouncerTests: XCTestCase {
     func testMultipleCallsWithDebounce() {
         let expectation = XCTestExpectation()
         let counter = Counter(value: 0)
-        let debouncer = DispatchQueueDebouncer(timeInterval: .milliseconds(100))
+        var debouncer = DispatchQueueDebouncer(timeInterval: .milliseconds(100))
         debouncer.debounce {
             counter.value += 1
             expectation.fulfill()
@@ -30,7 +30,7 @@ class DispatchQueueDebouncerTests: XCTestCase {
         var expectation = XCTestExpectation()
 
         let counter = Counter(value: 0)
-        let debouncer = DispatchQueueDebouncer(timeInterval: .milliseconds(100))
+        var debouncer = DispatchQueueDebouncer(timeInterval: .milliseconds(100))
         debouncer.debounce {
             counter.value += 1
             expectation.fulfill()

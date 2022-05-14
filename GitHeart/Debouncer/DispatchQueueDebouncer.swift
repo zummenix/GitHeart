@@ -8,7 +8,7 @@
 import Foundation
 
 /// Debouncer implementation based on a dispatch queue.
-class DispatchQueueDebouncer: Debouncer {
+struct DispatchQueueDebouncer: Debouncer {
     private var workItem: DispatchWorkItem?
     private let timeInterval: DispatchTimeInterval
     private let queue: DispatchQueue
@@ -18,7 +18,7 @@ class DispatchQueueDebouncer: Debouncer {
         self.queue = queue
     }
 
-    func debounce(call: @escaping (() -> Void)) {
+    mutating func debounce(call: @escaping (() -> Void)) {
         workItem?.cancel()
         workItem = DispatchWorkItem {
             call()

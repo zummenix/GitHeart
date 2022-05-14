@@ -39,8 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let controller = UsersListViewController(
                     viewModel: UsersListViewModel(
                         usersListProvider: usersService,
-                        imageProvider: imageService,
-                        searchDebouncer: DispatchQueueDebouncer(timeInterval: .seconds(1))
+                        imageProvider: imageService
                     )
                 )
                 controller.didTapUser = didTapUser

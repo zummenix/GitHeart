@@ -8,7 +8,7 @@
 import Foundation
 
 /// A type that is able to debounce a call.
-protocol Debouncer: AnyObject {
+protocol Debouncer {
     /// Schedules work to perform at later time and cancels previous work if it was in progress.
-    func debounce(call: @escaping (() -> Void))
+    mutating func debounce(call: @escaping (() -> Void))
 }
