@@ -6,9 +6,16 @@
 
 set -e
 
-DEVICE=$(xcrun simctl list devices available | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}')
 SCHEME="GitHeart"
 PROJECT="GitHeart.xcodeproj"
+DEVICE=$(
+   xcodebuild -showdestinations -project "$PROJECT" -scheme "$SCHEME" |
+   grep 'name:iPhone' | sed 's/.*name:\([^,}]*\).*/\1/' | head -1 | xargs echo
+)
 DESTINATION="platform=iOS Simulator,name=$DEVICE"
 
-xcodebuild $1 -scheme "$SCHEME" -project "$PROJECT" -destination "$DESTINATION"
+xcodebuild $1 \
+   -project "$PROJECT" \
+   -scheme "$SCHEME" \
+   -destination "$DESTINATION" \
+   -showBuildTimingSummary
