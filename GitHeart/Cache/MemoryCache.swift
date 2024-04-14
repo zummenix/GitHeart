@@ -18,19 +18,16 @@ protocol ByteSizable {
 /// Implements FIFO cache replacement policy. When by adding a new value the size exceeds the `maxByteSize`
 /// the cache will start to remove old values to fit the new one.
 ///
-/// The class is thread safe.
-///
 /// Time complexity to get the value is O(1).
 /// Time complexity to set the value is O(n) in a worst case, O(1) in a best case.
 final class MemoryCache<Key: Hashable, Value: ByteSizable> {
-    private let serialQueue = DispatchQueue(label: "MemoryCache: \(UUID().uuidString)")
     private var map: [Key: Value] = [:]
     private var queue: [Key] = [] // Added keys are new.
     private var size: Int = 0
 
     /// The total size of the cache in bytes.
     var totalSize: Int {
-        return serialQueue.sync { size }
+        return size
     }
 
     /// Maximum size of the cache in bytes.
@@ -59,40 +56,36 @@ extension MemoryCache: Cache {
     typealias Value = Value
 
     func value(forKey key: Key) -> Value? {
-        return serialQueue.sync { map[key] }
+        return map[key]
     }
 
     func set(value: Value?, for key: Key) {
-        serialQueue.async {
-            if let value = value {
-                self.evictValueIfExists(forKey: key)
-                if self.doesExceedMaxByteSize(for: value.byteSize) {
-                    // Remove old values until the new value fits in the cache.
-                    repeat {
-                        if self.queue.isEmpty {
-                            return
-                        }
-                        let oldKey = self.queue.removeFirst()
-                        let oldValue = self.map[oldKey]! // The value should exist in the map.
-                        self.map[oldKey] = nil
-                        self.size -= oldValue.byteSize
-                    } while self.doesExceedMaxByteSize(for: value.byteSize)
-                }
-                self.size += value.byteSize
-                self.queue.append(key)
-                self.map[key] = value
-            } else {
-                self.evictValueIfExists(forKey: key)
+        if let value = value {
+            evictValueIfExists(forKey: key)
+            if doesExceedMaxByteSize(for: value.byteSize) {
+                // Remove old values until the new value fits in the cache.
+                repeat {
+                    if queue.isEmpty {
+                        return
+                    }
+                    let oldKey = queue.removeFirst()
+                    let oldValue = map[oldKey]! // The value should exist in the map.
+                    map[oldKey] = nil
+                    size -= oldValue.byteSize
+                } while doesExceedMaxByteSize(for: value.byteSize)
             }
+            size += value.byteSize
+            queue.append(key)
+            map[key] = value
+        } else {
+            evictValueIfExists(forKey: key)
         }
     }
 
     func removeAll() {
-        serialQueue.async {
-            self.queue.removeAll(keepingCapacity: false)
-            self.map.removeAll(keepingCapacity: false)
-            self.size = 0
-        }
+        queue.removeAll(keepingCapacity: false)
+        map.removeAll(keepingCapacity: false)
+        size = 0
     }
 }
 

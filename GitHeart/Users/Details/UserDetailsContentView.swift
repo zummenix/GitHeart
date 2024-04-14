@@ -29,7 +29,7 @@ class UserDetailsContentView: UIView {
     }()
 
     private let activityIndicatorView: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .gray)
+        let indicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
         indicator.isHidden = true
         indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator

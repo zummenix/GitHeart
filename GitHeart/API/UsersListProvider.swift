@@ -13,10 +13,11 @@ struct UsersList {
 }
 
 /// A type that provides the list of users.
+@MainActor
 protocol UsersListProvider {
     /// Requests the first page of users applying `searchTerm` if not empty.
-    func users(searchTerm: String, completion: @escaping ((Result<UsersList, Error>) -> Void))
+    func users(searchTerm: String) async throws -> UsersList
 
     /// Requests the next pages of users.
-    func users(url: URL, completion: @escaping ((Result<UsersList, Error>) -> Void))
+    func users(url: URL) async throws -> UsersList
 }

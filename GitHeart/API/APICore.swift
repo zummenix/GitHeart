@@ -8,11 +8,11 @@
 import Foundation
 
 /// Implements the minimum of necessary logic for the project to work with the github API.
-class APICore {
+actor APICore {
     /// A response representation for the API.
     struct Response {
         let data: Data
-        let headerFields: [AnyHashable: Any]
+        let headerFields: [String: Sendable]
     }
 
     /// A simple error type for the API.
@@ -56,7 +56,7 @@ class APICore {
     /// This method is called right before performing the request.
     func modified(request: URLRequest) -> URLRequest {
         var request = request
-        request.setValue("application/vnd.github.v3+json", forHTTPHeaderField: "Accept")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
         if !token.isEmpty {
             request.setValue("token \(token)", forHTTPHeaderField: "Authorization")
         }
@@ -64,34 +64,32 @@ class APICore {
     }
 
     /// Performs the request.
-    ///
-    /// The completion block will be called on a queue of the `URLSession` provided in `init`.
-    func perform(request: URLRequest, completion: @escaping ((Result<Response, Swift.Error>) -> Void)) {
-        let task = session.dataTask(with: modified(request: request)) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            var headerFields: [AnyHashable: Any] = [:]
-            if let response = response as? HTTPURLResponse {
-                if response.statusCode >= 400 {
-                    if let error = APICore.errorsByStatusCode[response.statusCode] {
-                        completion(.failure(error))
-                    } else {
-                        completion(.failure(Error(message: "Service Unknown Failure")))
-                    }
-                    return
+    func perform(request: URLRequest) async throws -> Response {
+        let (data, response) = try await session.my_data(for: modified(request: request))
+        var headerFields: [String: Sendable] = [:]
+        if let response = response as? HTTPURLResponse {
+            if response.statusCode >= 400 {
+                if let error = APICore.errorsByStatusCode[response.statusCode] {
+                    throw error
+                } else {
+                    throw Error(message: "Service Unknown Failure")
                 }
-                headerFields = response.allHeaderFields
             }
-
-            if let data = data, !data.isEmpty {
-                completion(.success(Response(data: data, headerFields: headerFields)))
-            } else {
-                completion(.failure(Error(message: "Empty Response")))
-            }
+            headerFields = (response.allHeaderFields as? [String: Sendable]) ?? [:]
         }
-        task.resume()
+
+        if data.isEmpty {
+            throw Error(message: "Empty Response")
+        } else {
+            return Response(data: data, headerFields: headerFields)
+        }
+    }
+}
+
+private extension URLSession {
+    // Without this method there is a warning `Passing argument of non-sendable type '(any URLSessionTaskDelegate)?'
+    // outside of actor-isolated context may introduce data races`
+    func my_data(for request: URLRequest) async throws -> (Data, URLResponse) {
+        try await data(for: request)
     }
 }
