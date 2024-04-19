@@ -18,7 +18,7 @@ func url(forResource resource: String) throws -> URL {
 
 /// Returns data for a resource in the test target.
 func data(forResource resource: String) throws -> Data {
-    return try Data(contentsOf: try url(forResource: resource))
+    try Data(contentsOf: url(forResource: resource))
 }
 
 private class Dummy {}

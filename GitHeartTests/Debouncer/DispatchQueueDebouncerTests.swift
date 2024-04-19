@@ -8,7 +8,7 @@
 @testable import GitHeart
 import XCTest
 
-class DispatchQueueDebouncerTests: XCTestCase {
+final class DispatchQueueDebouncerTests: XCTestCase {
     func testMultipleCallsWithDebounce() {
         let expectation = XCTestExpectation()
         let counter = Counter(value: 0)

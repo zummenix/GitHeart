@@ -21,7 +21,7 @@ actor APICore {
         let message: String
 
         var errorDescription: String? {
-            return message
+            message
         }
     }
 

@@ -9,6 +9,6 @@ import Foundation
 
 extension Data: ByteSizable {
     var byteSize: Int {
-        return count
+        count
     }
 }

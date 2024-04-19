@@ -157,7 +157,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     private func isTableViewUnderNavigationBar() -> Bool {
-        return tableView.contentOffset.y + view.safeAreaInsets.top > 0.0
+        tableView.contentOffset.y + view.safeAreaInsets.top > 0.0
     }
 
     private func updateNavigationBarTransparency() {
@@ -181,7 +181,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK: - UITableViewDelegate, UITableViewDataSource
 
     func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
-        return viewModel.numberOfUsers()
+        viewModel.numberOfUsers()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

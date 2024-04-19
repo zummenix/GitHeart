@@ -27,7 +27,7 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
 
     /// The total size of the cache in bytes.
     var totalSize: Int {
-        return size
+        size
     }
 
     /// Maximum size of the cache in bytes.
@@ -47,7 +47,7 @@ final class MemoryCache<Key: Hashable, Value: ByteSizable> {
     }
 
     private func doesExceedMaxByteSize(for addedByteSize: Int) -> Bool {
-        return size + addedByteSize > maxByteSize
+        size + addedByteSize > maxByteSize
     }
 }
 
@@ -56,11 +56,11 @@ extension MemoryCache: Cache {
     typealias Value = Value
 
     func value(forKey key: Key) -> Value? {
-        return map[key]
+        map[key]
     }
 
     func set(value: Value?, for key: Key) {
-        if let value = value {
+        if let value {
             evictValueIfExists(forKey: key)
             if doesExceedMaxByteSize(for: value.byteSize) {
                 // Remove old values until the new value fits in the cache.
