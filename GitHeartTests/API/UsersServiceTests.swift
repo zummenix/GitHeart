@@ -10,23 +10,35 @@ import XCTest
 
 final class UsersServiceTests: XCTestCase {
     func testDecodeUsersList() async throws {
-        let sut = await makeSUT(mockedResponse: .success(.init(data: try data(forResource: "users.json"), headerFields: [:])))
+        let sut = try await makeSUT(
+            mockedResponse: .success(
+                .init(data: data(forResource: "users.json"), headerFields: [:])
+            )
+        )
         let usersList = try await sut.users(searchTerm: "")
         XCTAssertEqual(usersList.users.count, 30)
     }
 
     func testExtractNextPageURLForUsersList() async throws {
-        let sut = await makeSUT(mockedResponse: .success(.init(data: try data(forResource: "users.json"),
-                                                               headerFields: ["Link": """
-                                                               <https://api.github.com/search/users?page=2&q=sort%3Afollowers>; rel="next", <https://api.github.com/search/users?page=34&q=sort%3Afollowers>; rel="last"
-                                                               """])))
+        let sut = try await makeSUT(
+            mockedResponse: .success(
+                .init(
+                    data: data(forResource: "users.json"),
+                    headerFields: ["Link": """
+                    <https://api.github.com/search/users?page=2&q=sort%3Afollowers>; rel="next", <https://api.github.com/search/users?page=34&q=sort%3Afollowers>; rel="last"
+                    """]
+                )
+            )
+        )
 
         let usersList = try await sut.users(searchTerm: "")
         XCTAssertEqual(usersList.next, URL(string: "https://api.github.com/search/users?page=2&q=sort%3Afollowers"))
     }
 
     func testDecodeUserDetails() async throws {
-        let sut = await makeSUT(mockedResponse: .success(.init(data: try data(forResource: "details.json"), headerFields: [:])))
+        let sut = try await makeSUT(
+            mockedResponse: .success(.init(data: data(forResource: "details.json"), headerFields: [:]))
+        )
         let userDetails = try await sut.userDetails(login: "")
         XCTAssertEqual(userDetails.login, "mojombo")
     }
@@ -42,14 +54,15 @@ final class UsersServiceTests: XCTestCase {
 
 private enum MockContainer {
     private static let lock = NSLock()
-    private nonisolated(unsafe) static var result: Result<APICore.Response, Swift.Error> = .failure(APICore.Error(message: "Something went wrong"))
+    private nonisolated(unsafe) static var result: Result<APICore.Response, Swift.Error> =
+        .failure(APICore.Error(message: "Something went wrong"))
 
     static func set(_ result: Result<APICore.Response, Swift.Error>) {
         lock.withLock { self.result = result }
     }
 
     static func current() -> Result<APICore.Response, Swift.Error> {
-        lock.withLock { self.result }
+        lock.withLock { result }
     }
 }
 

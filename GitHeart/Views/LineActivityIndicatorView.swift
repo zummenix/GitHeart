@@ -11,7 +11,7 @@ import UIKit
 /// An activity indicator view as a line to indicate processing.
 ///
 /// The animation duration adapts automatically by calculating the duration of previous processing task.
-class LineActivityIndicatorView: UIView {
+final class LineActivityIndicatorView: UIView {
     private let preferredHeight: CGFloat
 
     private var startAnimationDate: Date?
@@ -57,7 +57,7 @@ class LineActivityIndicatorView: UIView {
     }
 
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: preferredHeight)
+        CGSize(width: UIView.noIntrinsicMetric, height: preferredHeight)
     }
 
     /// Starts the animation of a progressing bar.

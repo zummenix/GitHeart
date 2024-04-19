@@ -63,11 +63,10 @@ class UsersListViewModel {
 
         Task {
             do {
-                let usersList: UsersList
-                if let url = nextPageURL {
-                    usersList = try await usersListProvider.users(url: url)
+                let usersList: UsersList = if let url = nextPageURL {
+                    try await usersListProvider.users(url: url)
                 } else {
-                    usersList = try await usersListProvider.users(searchTerm: searchText)
+                    try await usersListProvider.users(searchTerm: searchText)
                 }
 
                 isLoading = false
@@ -96,28 +95,28 @@ class UsersListViewModel {
         nextPageURL = nil
 
         searchDebouncer.debounce { [weak self] in
-            guard let self = self else { return }
-            if self.isLoading {
-                self.applySearch(text: self.searchText)
+            guard let self else { return }
+            if isLoading {
+                applySearch(text: searchText)
             } else {
-                self.load()
+                load()
             }
         }
     }
 
     /// Returns number of users in the list.
     func numberOfUsers() -> Int {
-        return users.count
+        users.count
     }
 
     /// Returns a view data of a user to show in a cell.
     func userViewData(at index: Int) -> UserViewData {
-        let user = self.user(at: index)
+        let user = user(at: index)
         return UserViewData(login: user.login, avatarUrl: user.avatarUrl)
     }
 
     /// Returns model of a user.
     func user(at index: Int) -> User {
-        return users[index]
+        users[index]
     }
 }

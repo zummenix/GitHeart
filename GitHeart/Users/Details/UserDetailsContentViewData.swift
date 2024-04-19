@@ -23,7 +23,7 @@ struct UserDetailsContentViewData {
 
     var followersFollowingRepos: NSAttributedString {
         let string = NSMutableAttributedString()
-        if let stats = stats {
+        if let stats {
             string.append(compoundString(left: String(stats.followers), right: "followers"))
             string.append(separatorString())
             string.append(compoundString(left: String(stats.following), right: "following"))
@@ -48,7 +48,7 @@ private func compoundString(left: String, right: String) -> NSAttributedString {
 }
 
 private func separatorString() -> NSAttributedString {
-    return NSAttributedString(string: " · ", attributes: [
+    NSAttributedString(string: " · ", attributes: [
         NSAttributedString.Key.foregroundColor: Colors.primaryTextColor,
         NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline),
     ])

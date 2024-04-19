@@ -8,7 +8,7 @@
 import UIKit
 
 /// The logo view to show on a navigation bar.
-class NavigationLogoView: UIView {
+final class NavigationLogoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 

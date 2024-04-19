@@ -8,7 +8,7 @@
 import UIKit
 
 /// The main router of the app.
-class MainRouter: Router {
+final class MainRouter: Router {
     struct Dependencies {
         let usersListFactory: (_ didTapUser: @escaping (User) -> Void) -> UIViewController
         let userDetailsFactory: (

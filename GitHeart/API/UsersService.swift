@@ -9,7 +9,7 @@ import Foundation
 
 /// Responsible for providing API interface to users.
 @MainActor
-class UsersService: UsersListProvider, UserDetailsProvider {
+final class UsersService: UsersListProvider, UserDetailsProvider {
     private let apiCore: APICore
     private let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -60,10 +60,11 @@ private extension JSONDecoder {
 private func parseHeaderLink(_ link: String) -> [String: URL] {
     // Scanner is only available starting from iOS 13, so a workaround:
     var result: [String: URL] = [:]
+    let wsAndAngleBrakets = CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn: "<>"))
     for pair in link.components(separatedBy: ",") {
         let parts = pair.components(separatedBy: ";")
         if parts.count == 2 {
-            let rawLink = parts[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines.union(CharacterSet(charactersIn: "<>")))
+            let rawLink = parts[0].trimmingCharacters(in: wsAndAngleBrakets)
             let key = parts[1].drop(while: { $0 != "\"" }).trimmingCharacters(in: CharacterSet(charactersIn: "\""))
             if let url = URL(string: rawLink) {
                 result[key] = url

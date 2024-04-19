@@ -34,7 +34,7 @@ class UserDetailsViewModel {
 
     /// The url of a user's page on GitHub.
     var userUrl: URL? {
-        return userDetails?.htmlUrl
+        userDetails?.htmlUrl
     }
 
     init(user: User, userDetailsProvider: UserDetailsProvider, imageProvider: ImageProvider) {
@@ -72,7 +72,7 @@ class UserDetailsViewModel {
     /// Returns content view data to show on screen.
     func contentViewData() -> UserDetailsContentViewData {
         var stats: UserDetailsContentViewData.Stats?
-        if let userDetails = userDetails {
+        if let userDetails {
             stats = UserDetailsContentViewData.Stats(followers: userDetails.followers, following: userDetails.following,
                                                      publicRepos: userDetails.publicRepos)
         }

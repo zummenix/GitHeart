@@ -8,7 +8,7 @@
 import UIKit
 
 /// A image view that is able to show an image from an `imageProvider`.
-class ImageView: UIImageView {
+final class ImageView: UIImageView {
     private var task: Task<Void, Never>?
     private var currentURL: URL?
 
@@ -22,7 +22,7 @@ class ImageView: UIImageView {
         image = nil
         currentURL = url
 
-        guard let url = url else { return }
+        guard let url else { return }
 
         task = Task {
             let image = await imageProvider.imageBy(url: url)

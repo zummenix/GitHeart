@@ -34,31 +34,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let session = URLSession.shared
         let imageService = ImageService(session: session, cache: imageCache)
         let usersService = UsersService(apiCore: APICore(token: Env.githubAccessToken, session: session))
-        return MainRouter(navigationController: navigationController, dependencies: MainRouter.Dependencies(
-            usersListFactory: { didTapUser in
-                let controller = UsersListViewController(
-                    viewModel: UsersListViewModel(
-                        usersListProvider: usersService,
-                        imageProvider: imageService
+        return MainRouter(
+            navigationController: navigationController,
+            dependencies: MainRouter.Dependencies(
+                usersListFactory: { didTapUser in
+                    let controller = UsersListViewController(
+                        viewModel: UsersListViewModel(
+                            usersListProvider: usersService,
+                            imageProvider: imageService
+                        )
                     )
-                )
-                controller.didTapUser = didTapUser
-                return controller
-            }, userDetailsFactory: { user, didTapShareUserUrl in
-                let controller = UserDetailsViewController(
-                    viewModel: UserDetailsViewModel(
-                        user: user,
-                        userDetailsProvider: usersService,
-                        imageProvider: imageService
+                    controller.didTapUser = didTapUser
+                    return controller
+                },
+                userDetailsFactory: { user, didTapShareUserUrl in
+                    let controller = UserDetailsViewController(
+                        viewModel: UserDetailsViewModel(
+                            user: user,
+                            userDetailsProvider: usersService,
+                            imageProvider: imageService
+                        )
                     )
-                )
-                controller.didTapShareUserUrl = didTapShareUserUrl
-                return controller
-            }, activityFactory: { url, sender in
-                let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                controller.popoverPresentationController?.barButtonItem = sender
-                return controller
-            }
-        ))
+                    controller.didTapShareUserUrl = didTapShareUserUrl
+                    return controller
+                },
+                activityFactory: { url, sender in
+                    let controller = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                    controller.popoverPresentationController?.barButtonItem = sender
+                    return controller
+                }
+            )
+        )
     }
 }

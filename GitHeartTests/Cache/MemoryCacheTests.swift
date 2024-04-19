@@ -10,15 +10,15 @@ import XCTest
 
 extension String: ByteSizable {
     public var byteSize: Int {
-        return count // For testing purposes we count one character as one byte.
+        count // For testing purposes we count one character as one byte.
     }
 }
 
 private func createCache(size: Int = 20) -> MemoryCache<String, String> {
-    return MemoryCache(maxByteSize: size)
+    MemoryCache(maxByteSize: size)
 }
 
-class MemoryCacheTests: XCTestCase {
+final class MemoryCacheTests: XCTestCase {
     func testSetsAndGetsValue() {
         let cache = createCache()
         cache.set(value: "a", for: "b")

@@ -12,7 +12,7 @@ extension UIAlertController {
     static func error(_ error: Error, tryAgainHandler: (() -> Void)?) -> UIAlertController {
         let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        if let tryAgainHandler = tryAgainHandler {
+        if let tryAgainHandler {
             alert.addAction(UIAlertAction(title: "Try Again", style: .default, handler: { _ in
                 tryAgainHandler()
             }))
