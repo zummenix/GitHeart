@@ -14,7 +14,8 @@ Shows the list of GitHub users and their details. Filter by Name, Nickname or Gi
 - Search and filter
 - Share user's GitHub page
 - Native look
-- Minimum iOS deployment target is iOS 12
+- Minimum iOS deployment target is iOS 15
+- Utilizes async/await with strict concurrency checking
 - No external dependencies
 
 ## LICENSE
