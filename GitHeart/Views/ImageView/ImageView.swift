@@ -9,24 +9,26 @@ import UIKit
 
 /// A image view that is able to show an image from an `imageProvider`.
 class ImageView: UIImageView {
-    private var task: ImageProviderTask?
-
-    override var image: UIImage? {
-        set {
-            super.image = newValue
-            task?.cancel()
-        }
-        get {
-            return super.image
-        }
-    }
+    private var task: Task<Void, Never>?
+    private var currentURL: URL?
 
     /// Sets an image by the `url` using an `imageProvider`.
     func setImage(url: URL?, imageProvider: ImageProvider) {
+        guard currentURL != url else { return }
+
+        task?.cancel()
+        task = nil
+
         image = nil
+        currentURL = url
+
         guard let url = url else { return }
-        task = imageProvider.imageBy(url: url, completion: { [weak self] image in
-            self?.image = image
-        })
+
+        task = Task {
+            let image = await imageProvider.imageBy(url: url)
+            if currentURL == url {
+                self.image = image
+            }
+        }
     }
 }

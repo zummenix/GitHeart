@@ -9,7 +9,8 @@ import OSLog
 import UIKit
 
 /// Responsible for requesting and providing an image by its url.
-class ImageService<C: Cache> where C.Key == URL, C.Value == Data {
+@MainActor
+final class ImageService<C: Cache> where C.Key == URL, C.Value == Data {
     private let session: URLSession
     private let cache: C
 
@@ -20,39 +21,38 @@ class ImageService<C: Cache> where C.Key == URL, C.Value == Data {
 }
 
 extension ImageService: ImageProvider {
-    func imageBy(url: URL, completion: @escaping (UIImage?) -> Void) -> ImageProviderTask? {
-        if let data = cache.value(forKey: url), let image = UIImage(data: data) {
-            completion(image)
-            return nil
+    func imageBy(url: URL) async -> UIImage? {
+        if let data = cache.value(forKey: url), let image = await UIImage.from(data: data) {
+            return image
         } else {
-            let task = session.dataTask(with: url) { [weak self] data, _, error in
-                if let error = error {
-                    if (error as NSError).code == NSURLErrorCancelled {
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        os_log(.error, "ImageService: failed to download image at %@. Error: %@", url.absoluteString, error.localizedDescription)
-                        completion(nil)
-                    }
-
-                    return
-                }
-                if let data = data, let image = UIImage(data: data) {
-                    self?.cache.set(value: data, for: url)
-                    DispatchQueue.main.async {
-                        completion(image)
-                    }
+            do {
+                let (data, _) = try await session.my_data(from: url)
+                if let image = await UIImage.from(data: data) {
+                    cache.set(value: data, for: url)
+                    return image
                 } else {
-                    DispatchQueue.main.async {
-                        os_log(.error, "ImageService: failed to decode image")
-                        completion(nil)
-                    }
+                    os_log(.error, "ImageService: failed to decode image")
+                    return nil
                 }
+            } catch {
+                os_log(
+                    .error, "ImageService: failed to download image at %@. Error: %@",
+                    url.absoluteString, error.localizedDescription
+                )
+                return nil
             }
-            task.resume()
-            return task
         }
     }
 }
 
-extension URLSessionTask: ImageProviderTask {}
+private extension URLSession {
+    func my_data(from url: URL) async throws -> (Data, URLResponse) {
+        try await data(from: url)
+    }
+}
+
+private extension UIImage {
+    static func from(data: Data) async -> UIImage? {
+        await Task.detached { UIImage(data: data) }.value
+    }
+}

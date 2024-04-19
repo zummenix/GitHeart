@@ -166,7 +166,7 @@ class UsersListViewController: UIViewController, UITableViewDelegate, UITableVie
 
     private func adjustTableViewBottomInset(_ value: CGFloat) {
         tableView.contentInset.bottom = value
-        tableView.scrollIndicatorInsets.bottom = value
+        tableView.verticalScrollIndicatorInsets.bottom = value
     }
 
     @objc private func keyboardWillShowNotification(_ notification: Notification) {

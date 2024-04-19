@@ -8,6 +8,7 @@
 import Foundation
 
 /// A view model for the users' list.
+@MainActor
 class UsersListViewModel {
     private let usersListProvider: UsersListProvider
     private var searchDebouncer: Debouncer
@@ -60,27 +61,28 @@ class UsersListViewModel {
         guard !isLoading, !isLastPage else { return }
         isLoading = true
 
-        let completion: ((Result<UsersList, Error>) -> Void) = { [weak self] result in
-            guard let self = self else { return }
-            if !self.isLastPage, self.nextPageURL == nil {
-                self.users = []
-            }
-            self.isLoading = false
-            switch result {
-            case let .success(usersList):
-                self.users.append(contentsOf: usersList.users)
-                self.nextPageURL = usersList.next
-                self.isLastPage = self.nextPageURL == nil
-                self.didUpdateUsersList?()
-            case let .failure(error):
-                self.didFail?(error)
-            }
-        }
+        Task {
+            do {
+                let usersList: UsersList
+                if let url = nextPageURL {
+                    usersList = try await usersListProvider.users(url: url)
+                } else {
+                    usersList = try await usersListProvider.users(searchTerm: searchText)
+                }
 
-        if let url = nextPageURL {
-            usersListProvider.users(url: url, completion: completion)
-        } else {
-            usersListProvider.users(searchTerm: searchText, completion: completion)
+                isLoading = false
+
+                if !isLastPage, nextPageURL == nil {
+                    users = []
+                }
+                users.append(contentsOf: usersList.users)
+                nextPageURL = usersList.next
+                isLastPage = nextPageURL == nil
+                didUpdateUsersList?()
+            } catch {
+                isLoading = false
+                didFail?(error)
+            }
         }
     }
 

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -98,7 +98,6 @@
 		4D736FCF269197BF00A5260A /* UserDetailsContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsContentView.swift; sourceTree = "<group>"; };
 		4D736FD32691998E00A5260A /* UserDetailsContentViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsContentViewData.swift; sourceTree = "<group>"; };
 		4D736FE32691BFF600A5260A /* NavigationLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLogoView.swift; sourceTree = "<group>"; };
-		4D736FE72691C1C100A5260A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4D79B32D268896AE008C1319 /* UserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetails.swift; sourceTree = "<group>"; };
 		4D79B3362688A7EE008C1319 /* UINavigationBar+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Ex.swift"; sourceTree = "<group>"; };
 		4D8389FB26A0748C00203165 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
@@ -199,8 +198,9 @@
 		4D238F2326837B9400DC6397 /* GitHeartTests */ = {
 			isa = PBXGroup;
 			children = (
-				4D2672C426F5CA3300816AFB /* APIResponses */,
-				4D736FE72691C1C100A5260A /* README.md */,
+				4DA98EC02BD0241B00116E69 /* API */,
+				4DA98EBF2BD0240100116E69 /* Debouncer */,
+				4DA98EBE2BD023E100116E69 /* Cache */,
 				4D238F2626837B9400DC6397 /* Info.plist */,
 				4D2672CF26F5CD0000816AFB /* Utils.swift */,
 			);
@@ -223,7 +223,6 @@
 				4D4B1904269041FF0070E353 /* UsersListProvider.swift */,
 				4D4B190A269042FA0070E353 /* UserDetailsProvider.swift */,
 				4D9239AF26F39B4B00606CDA /* UsersService.swift */,
-				4D2672CD26F5CAF400816AFB /* UsersServiceTests.swift */,
 				4D1149C0268A002B00560AA6 /* APICore.swift */,
 			);
 			path = API;
@@ -235,7 +234,6 @@
 				4D8389FB26A0748C00203165 /* Cache.swift */,
 				4D66A39826E4F3450051C99A /* MemoryWarningHandler.swift */,
 				4D1149C9268B63A200560AA6 /* MemoryCache.swift */,
-				4D4B191326905B360070E353 /* MemoryCacheTests.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -280,12 +278,36 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		4DA98EBE2BD023E100116E69 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				4D4B191326905B360070E353 /* MemoryCacheTests.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
+		4DA98EBF2BD0240100116E69 /* Debouncer */ = {
+			isa = PBXGroup;
+			children = (
+				4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */,
+			);
+			path = Debouncer;
+			sourceTree = "<group>";
+		};
+		4DA98EC02BD0241B00116E69 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				4D2672CD26F5CAF400816AFB /* UsersServiceTests.swift */,
+				4D2672C426F5CA3300816AFB /* APIResponses */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
 		4DC7B205269CA53E00FE84A1 /* Debouncer */ = {
 			isa = PBXGroup;
 			children = (
 				4DC7B206269CA56500FE84A1 /* Debouncer.swift */,
 				4DC7B20A269CA62B00FE84A1 /* DispatchQueueDebouncer.swift */,
-				4DC7B20E269CAA0000FE84A1 /* DispatchQueueDebouncerTests.swift */,
 			);
 			path = Debouncer;
 			sourceTree = "<group>";
@@ -344,8 +366,9 @@
 		4D238F0226837B9300DC6397 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1530;
 				TargetAttributes = {
 					4D238F0926837B9300DC6397 = {
 						CreatedOnToolsVersion = 12.4;
@@ -543,13 +566,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
 			};
 			name = Debug;
 		};
@@ -598,12 +622,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -655,7 +680,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K3WH7KQY37;
 				INFOPLIST_FILE = GitHeartTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -679,7 +703,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = K3WH7KQY37;
 				INFOPLIST_FILE = GitHeartTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

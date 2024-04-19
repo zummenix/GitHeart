@@ -8,7 +8,8 @@
 import Foundation
 
 /// Responsible for providing API interface to users.
-class UsersService {
+@MainActor
+class UsersService: UsersListProvider, UserDetailsProvider {
     private let apiCore: APICore
     private let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
@@ -19,42 +20,36 @@ class UsersService {
     init(apiCore: APICore) {
         self.apiCore = apiCore
     }
+
+    func users(searchTerm: String) async throws -> UsersList {
+        let query = searchTerm.isEmpty ? "type:user" : searchTerm
+        let request = await apiCore.makeGETRequest(path: "/search/users", query: ["q": query, "sort": "followers"])
+        return try await users(request: request)
+    }
+
+    func users(url: URL) async throws -> UsersList {
+        try await users(request: URLRequest(url: url))
+    }
+
+    private func users(request: URLRequest) async throws -> UsersList {
+        let response = try await apiCore.perform(request: request)
+        let paginatedUsers = try await jsonDecoder.decodeAsync(PaginatedUsers.self, from: response.data)
+        return UsersList(
+            users: paginatedUsers.items,
+            next: parseHeaderLink((response.headerFields["Link"] as? String) ?? "")["next"]
+        )
+    }
+
+    func userDetails(login: String) async throws -> UserDetails {
+        let request = await apiCore.makeGETRequest(path: "/users/\(login)", query: [:])
+        let response = try await apiCore.perform(request: request)
+        return try await jsonDecoder.decodeAsync(UserDetails.self, from: response.data)
+    }
 }
 
-extension UsersService: UsersListProvider {
-    func users(searchTerm: String, completion: @escaping ((Result<UsersList, Error>) -> Void)) {
-        let query = searchTerm.isEmpty ? "sort:followers" : searchTerm
-        users(request: apiCore.makeGETRequest(path: "/search/users", query: ["q": query]), completion: completion)
-    }
-
-    func users(url: URL, completion: @escaping ((Result<UsersList, Error>) -> Void)) {
-        users(request: URLRequest(url: url), completion: completion)
-    }
-
-    private func users(request: URLRequest, completion: @escaping ((Result<UsersList, Error>) -> Void)) {
-        apiCore.perform(request: request, completion: { [jsonDecoder] result in
-            let result = result.flatMap { response in
-                Result { try jsonDecoder.decode(PaginatedUsers.self, from: response.data) }.map { paginatedUsers in
-                    UsersList(users: paginatedUsers.items, next: parseHeaderLink((response.headerFields["Link"] as? String) ?? "")["next"])
-                }
-            }
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        })
-    }
-}
-
-extension UsersService: UserDetailsProvider {
-    func userDetails(login: String, completion: @escaping (Result<UserDetails, Error>) -> Void) {
-        apiCore.perform(request: apiCore.makeGETRequest(path: "/users/\(login)", query: [:])) { [jsonDecoder] result in
-            let result = result.flatMap { response in
-                Result { try jsonDecoder.decode(UserDetails.self, from: response.data) }
-            }
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        }
+private extension JSONDecoder {
+    func decodeAsync<T>(_ type: T.Type, from data: Data) async throws -> T where T: Decodable & Sendable {
+        try await Task.detached { try self.decode(type, from: data) }.value
     }
 }
 

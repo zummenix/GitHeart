@@ -8,11 +8,12 @@
 import UIKit
 
 /// A view model for the user details.
+@MainActor
 class UserDetailsViewModel {
     private let user: User
     private let userDetailsProvider: UserDetailsProvider
     private let imageProvider: ImageProvider
-    private var imageProviderTask: ImageProviderTask?
+    private var imageProviderTask: Task<Void, Never>?
     private var userDetails: UserDetails?
 
     private var avatarImage: UIImage?
@@ -46,21 +47,24 @@ class UserDetailsViewModel {
     func load() {
         guard !isLoading else { return }
         isLoading = true
-        userDetailsProvider.userDetails(login: user.login) { [weak self] result in
-            self?.isLoading = false
-            switch result {
-            case let .success(userDetails):
-                self?.userDetails = userDetails
-                self?.didLoad?()
-            case let .failure(error):
-                self?.didFail?(error)
+
+        Task {
+            do {
+                let userDetails = try await userDetailsProvider.userDetails(login: user.login)
+                isLoading = false
+                self.userDetails = userDetails
+                didLoad?()
+            } catch {
+                isLoading = false
+                didFail?(error)
             }
         }
+
+        imageProviderTask?.cancel()
         if let avatarUrl = user.avatarUrl {
-            imageProviderTask?.cancel()
-            imageProviderTask = imageProvider.imageBy(url: avatarUrl) { [weak self] image in
-                self?.avatarImage = image
-                self?.didLoad?()
+            imageProviderTask = Task {
+                avatarImage = await imageProvider.imageBy(url: avatarUrl)
+                didLoad?()
             }
         }
     }

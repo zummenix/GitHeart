@@ -6,7 +6,8 @@
 //
 
 /// A type that provides the details of a user.
+@MainActor
 protocol UserDetailsProvider {
     /// Requests the details of a user by its `login`.
-    func userDetails(login: String, completion: @escaping (Result<UserDetails, Error>) -> Void)
+    func userDetails(login: String) async throws -> UserDetails
 }
